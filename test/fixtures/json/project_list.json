@@ -1,0 +1,20 @@
+[{
+  "messages": []
+},
+  {
+    "members": [
+      "DocumentReference<Map<String, dynamic>>(users/7Zj3lpGWOoT1ifiFeylvw84NJoR2)",
+      "DocumentReference<Map<String, dynamic>>(users/UVxGycNsa7OOis3uPALjwGfZj8g2)", "DocumentReference<Map<String, dynamic>>(users/4VM9IyRQ3HNO8ZIm8i7Q3hOY2eF2)]"
+    ],
+    "tasks": [{
+      "itemName": "task",
+      "owner": null,
+      "date": "Timestamp(seconds=1676706380, nanoseconds=704000000)",
+      "complete": false
+    }],
+    "owner": "DocumentReference<Map<String, dynamic>>(users/7Zj3lpGWOoT1ifiFeylvw84NJoR2)",
+    "isPublic": true,
+    "date": "Timestamp(seconds=1676706364, nanoseconds=804000000)",
+    "name": "newproj"
+  }
+]

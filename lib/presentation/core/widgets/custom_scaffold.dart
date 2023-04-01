@@ -1,4 +1,3 @@
-import 'package:cash_manager/presentation/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class CustomScaffold extends StatelessWidget {
@@ -33,14 +32,11 @@ class CustomScaffold extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         drawer:  drawer,
-        body: Padding(
-          padding: padding ?? const EdgeInsets.symmetric(horizontal: 5),
-          child: isScrolling
-              ? SingleChildScrollView(
-                  child: body,
-                )
-              : body,
-        ),
+        body: isScrolling
+            ? SingleChildScrollView(
+                child: body,
+              )
+            : body,
         bottomNavigationBar: bottomNavigationBar,
         floatingActionButton: floatingActionButton,
       ),

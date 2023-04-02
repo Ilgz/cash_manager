@@ -45,8 +45,8 @@ class _TransactionPageState extends State<TransactionPage>
       children: [
         // FAB 1
         SpeedDialChild(
-            child: Icon(Icons.money_off),
-            backgroundColor: Color(0xff0039a5),
+            child: Icon(Icons.money_off,color: Color(0xff0039a5)),
+            backgroundColor: Colors.white,
             onTap: () {
               showModalBottomSheet(
                   context: context,
@@ -58,28 +58,27 @@ class _TransactionPageState extends State<TransactionPage>
                   builder: (BuildContext context) =>
                       ExpensePage());
             },
-            // label: 'Expense',
-            // labelStyle: TextStyle(
-            //     fontWeight: FontWeight.w500,
-            //     color: Colors.white,
-            //     fontSize: 16.0),
+            label: 'Expense',
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+                fontSize: 16.0),
             // labelBackgroundColor: Color(0xFF801E48)
         ),
         // FAB 2
         SpeedDialChild(
-            child: Icon(Icons.attach_money),
-            backgroundColor: Color(0xff0039a5),
+          child: Icon(Icons.attach_money,color: Color(0xff0039a5)),
+          backgroundColor: Colors.white,
             onTap: () {
               // setState(() {
               //   _counter = 0;
               // });
             },
-            // label: 'Income',
-            // labelStyle: TextStyle(
-            //     fontWeight: FontWeight.w500,
-            //     color: Colors.white,
-            //     fontSize: 16.0),
-            // labelBackgroundColor: Color(0xFF801E48)
+            label: 'Income ',
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+                fontSize: 16.0),
         )
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:cash_manager/application/%20expense/expense_filter/expense_filter_cubit.dart';
 import 'package:cash_manager/application/%20expense/expense_watcher/expense_watcher_cubit.dart';
 import 'package:cash_manager/domain/transaction/expense.dart';
+import 'package:cash_manager/presentation/core/constants.dart';
 import 'package:cash_manager/presentation/core/widgets/critical_failure_card.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_progress_indicator.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_scaffold.dart';
@@ -19,20 +20,6 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage>
     with SingleTickerProviderStateMixin {
   late final _tabController;
-  final List<String> months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
-  ];
   late final List<Tab> tabs = months
       .map((e) => Tab(
             text: e,
@@ -201,8 +188,9 @@ class _TransactionPageState extends State<TransactionPage>
                     unselectedLabelStyle: TextStyle(color: Colors.grey),
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicatorWeight: 3.0,
-                    // Set the indicator weight
-                    onTap: (index) {},
+                    onTap: (index) {
+                      context.read<ExpenseFilterCubit>().monthIndexChanged(index,context.read<ExpenseWatcherCubit>().state.maybeMap(loadSuccess:(state)=>state.expenses,orElse: ()=>[]));
+                    },
                     isScrollable: true,
                     controller: _tabController,
                     tabs: tabs))),
@@ -213,51 +201,63 @@ class _TransactionPageState extends State<TransactionPage>
             child: BlocBuilder<ExpenseWatcherCubit, ExpenseWatcherState>(
   builder: (context, state) {
     return state.map(initial: (_)=>SizedBox(), loadInProgress: (_)=>CustomProgressIndicator(), loadSuccess: (successState){
-      if(successState.expenses.isNotEmpty) {
         context.read<ExpenseFilterCubit>().updateExpenses(successState.expenses);
         return BlocBuilder<ExpenseFilterCubit, ExpenseFilterState>(
   builder: (context, state) {
     final expenses=state.expenses;
-    return ListView.builder(
+    if(expenses.isNotEmpty) {
+      return ListView.builder(
             shrinkWrap: true,
             itemCount: expenses.length,
             itemBuilder: (context, index) {
               final expense=expenses[index];
               final category=Expense.categories[expense.category];
-              return SizedBox(
+              final isSameDay=(index!=0&&expense.date.day==expenses[index-1].date.day);
+              return Container(
                 width: double.infinity,
                 height: 60,
                 child: Row(
                   children: [
-                    Padding(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "TUE",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[800],
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            "4",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Color(0xffb2e2ed),
-                            radius: 2,
-                          )
-                        ],
+                    Container(
+                      width:50,
+                      child: Padding(
+                        padding:
+                        const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: isSameDay?Column(
+                          children: List.generate(150~/10, (index) => Expanded(
+                            child: Container(
+                              color: index%2==0?Colors.transparent
+                                  :Colors.grey,
+                              width: 2,
+                            ),
+                          )),
+                        ):Column(
+                          mainAxisAlignment: (index!=(expenses.length-1)&&expense.date.day==expenses[index+1].date.day)?MainAxisAlignment.end:MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              weekDays[expense.date.weekday-1].toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              expense.date.day.toString(),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            CircleAvatar(
+                              backgroundColor: Color(0xffb2e2ed),
+                              radius: 2,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding:  EdgeInsets.only(right: 8,left:8,top: isSameDay?2:8),
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
@@ -331,11 +331,12 @@ class _TransactionPageState extends State<TransactionPage>
                 ),
               );
             });
+    }else{
+      return Container(margin:EdgeInsets.only(top: 20),alignment: Alignment.topCenter,child: Text("There are no transactions for the selected period.",style: TextStyle(color: Colors.grey[700]),));
+    }
   },
 );
-      }else{
-        return Container(margin:EdgeInsets.only(top: 20),alignment: Alignment.topCenter,child: Text("There are no transactions for the selected period.",style: TextStyle(color: Colors.grey[700]),));
-      }
+
     }, loadFailure: (_)=>const CriticalFailureCard());
 
   },

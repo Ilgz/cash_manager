@@ -8,11 +8,12 @@ part 'expense_filter_cubit.freezed.dart';
 @injectable
 class ExpenseFilterCubit extends Cubit<ExpenseFilterState> {
   ExpenseFilterCubit() : super(ExpenseFilterState.initial());
-  void monthIndexChanged(int monthIndex){
+  void monthIndexChanged(int monthIndex,List<Expense> expenses){
     emit(state.copyWith(monthIndex: monthIndex));
-    updateExpenses(state.expenses);
+    updateExpenses(expenses);
   }
   void updateExpenses(List<Expense> expenses){
-    emit(state.copyWith(expenses: expenses));
+    final filteredExpenses=expenses.where((expense) => expense.date.month==(state.monthIndex+1)).toList();
+    emit(state.copyWith(expenses: filteredExpenses));
   }
 }

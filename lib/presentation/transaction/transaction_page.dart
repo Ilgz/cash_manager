@@ -11,11 +11,10 @@ import 'package:cash_manager/presentation/transaction/expense/expense_page.dart'
 import 'package:cash_manager/presentation/transaction/income/income_page.dart';
 import 'package:cash_manager/presentation/transaction/widgets/income_expense_chart.dart';
 import 'package:dartz/dartz.dart' hide State;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
+import 'package:intl/intl.dart';
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
 
@@ -177,14 +176,37 @@ class _TransactionPageState extends State<TransactionPage>
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.grey)),
-                                          Text(
-                                            '2,400',
+                                          BlocBuilder<TransactionWatcherCubit, TransactionWatcherState>(
+  builder: (context, state) {
+    return Text(
+      state.maybeMap(loadSuccess:(state){
+        double balance=0;
+        for(var transaction in state.transactionData){
+          transaction.fold((expense) => balance-=expense.amount.getOrCrash(), (income) => balance+=income.amount.getOrCrash());
+        }
+        String rawBalance=balance.toInt().toString();
+        late String formattedBalance;
+        if(rawBalance.length==4){
+          print(rawBalance);
+          formattedBalance = NumberFormat('#,###').format(balance.toInt());
+        }
+        else if(rawBalance.length==5){
+          formattedBalance = NumberFormat('##,###').format(balance.toInt());
+        }
+        else{
+          formattedBalance=rawBalance;
+       }
+          return formattedBalance;
+      },orElse: ()=>
+      '0',),
                                             style: TextStyle(
                                               fontSize: 24,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
                                             ),
-                                          ),
+                                          );
+  },
+),
                                         ],
                                       )
                                     ],
@@ -348,21 +370,21 @@ class _TransactionPageState extends State<TransactionPage>
                                           transactions: transactions,
                                           category: category,
                                           onClicked: () {
-                                            // showModalBottomSheet(
-                                            //     context: context,
-                                            //     isDismissible: false,
-                                            //     shape: RoundedRectangleBorder(
-                                            //         borderRadius:
-                                            //         BorderRadius.vertical(
-                                            //             top:
-                                            //             Radius.circular(
-                                            //                 20))),
-                                            //     isScrollControlled: true,
-                                            //     builder:
-                                            //         (BuildContext context) =>
-                                            //         ExpensePage(
-                                            //           expense: expense,
-                                            //         ));
+                                            showModalBottomSheet(
+                                                context: context,
+                                                isDismissible: false,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.vertical(
+                                                        top:
+                                                        Radius.circular(
+                                                            20))),
+                                                isScrollControlled: true,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                    IncomePage(
+                                                      income:income,
+                                                    ));
                                           },
                                           transactionName:
                                           income.incomeName.getOrCrash(),

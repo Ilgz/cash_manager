@@ -3,6 +3,8 @@ import 'package:cash_manager/application/%20expense/expense_watcher/expense_watc
 import 'package:cash_manager/domain/transaction/expense.dart';
 import 'package:cash_manager/injection.dart';
 import 'package:cash_manager/presentation/core/widgets/failure_snackbar.dart';
+import 'package:cash_manager/presentation/transaction/widgets/expense_name.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,8 +65,10 @@ class ExpensePage extends StatelessWidget {
                 BlocBuilder<ExpenseFormCubit, ExpenseFormState>(
                   builder: (context, state) {
                     return ExpenseNameWidget(
-                      state: state,
-                      controller: _nameController,
+                      state: left(state),
+                      controller: _nameController, onChanged: (value){
+                      context.read<ExpenseFormCubit>().nameChanged(value);
+                    },
                     );
                   },
                 ),
@@ -220,66 +224,7 @@ class ExpensePage extends StatelessWidget {
   }
 }
 
-class ExpenseNameWidget extends StatelessWidget {
-  const ExpenseNameWidget({
-    super.key,
-    required this.state, required this.controller,
-  });
-  final TextEditingController controller;
-  final ExpenseFormState state;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          (!state.showErrorMessages ||
-                  state.expense.expenseName.value.isRight())
-              ? "Expense Name"
-              : state.expense.expenseName.value.fold(
-                  (f) => f.maybeMap(
-                      empty: (_) => 'Empty value',
-                      exceedingLength: (_) => 'Exceeding length 50 symbols',
-                      orElse: () => ""),
-                  (_) => ""),
-          style: TextStyle(
-              fontSize: 12,
-              color: (!state.showErrorMessages ||
-                      state.expense.expenseName.value.isRight())
-                  ? Colors.grey[800]
-                  : Colors.red),
-        ),
-        SizedBox(height: 4),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-              color: Colors.grey[200],
-              border: Border.all(
-                  color: (!state.showErrorMessages ||
-                          state.expense.expenseName.value.isRight())
-                      ? Colors.grey[500]!
-                      : Colors.red),
-              borderRadius: BorderRadius.circular(8)),
-          child: TextField(
-            controller: controller,
-            style: Theme.of(context).textTheme.bodyText1,
-            cursorColor: Theme.of(context).primaryColor,
-            decoration: const InputDecoration(
-                hintText: "Expense Name",
-                border: InputBorder.none,
-                isDense: true),
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(50),
-            ],
-            onChanged: (value) =>
-                context.read<ExpenseFormCubit>().nameChanged(value),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class AmountWidget extends StatelessWidget {
   const AmountWidget({

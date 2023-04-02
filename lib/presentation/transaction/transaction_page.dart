@@ -9,6 +9,7 @@ import 'package:cash_manager/presentation/transaction/expense/expense_page.dart'
 import 'package:cash_manager/presentation/transaction/widgets/income_expense_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -31,21 +32,62 @@ class _TransactionPageState extends State<TransactionPage>
     _tabController = TabController(vsync: this, length: 12,initialIndex: (DateTime.now().month-1));
     super.initState();
   }
+  Widget _getFAB() {
+    return SpeedDial(
+      icon:Icons.add,
+     iconTheme: IconThemeData(size: 22),
+     // animatedIcon: AnimatedIcons.menu_close,
+     // animatedIconTheme: IconThemeData(size: 22),
+      backgroundColor: Color(0xff00b6e4),
+      visible: true,
 
+      curve: Curves.bounceIn,
+      children: [
+        // FAB 1
+        SpeedDialChild(
+            child: Icon(Icons.money_off),
+            backgroundColor: Color(0xff0039a5),
+            onTap: () {
+              showModalBottomSheet(
+                  context: context,
+                  isDismissible: false,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20))),
+                  isScrollControlled: true,
+                  builder: (BuildContext context) =>
+                      ExpensePage());
+            },
+            // label: 'Expense',
+            // labelStyle: TextStyle(
+            //     fontWeight: FontWeight.w500,
+            //     color: Colors.white,
+            //     fontSize: 16.0),
+            // labelBackgroundColor: Color(0xFF801E48)
+        ),
+        // FAB 2
+        SpeedDialChild(
+            child: Icon(Icons.attach_money),
+            backgroundColor: Color(0xff0039a5),
+            onTap: () {
+              // setState(() {
+              //   _counter = 0;
+              // });
+            },
+            // label: 'Income',
+            // labelStyle: TextStyle(
+            //     fontWeight: FontWeight.w500,
+            //     color: Colors.white,
+            //     fontSize: 16.0),
+            // labelBackgroundColor: Color(0xFF801E48)
+        )
+      ],
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      floatingActionButton: FloatingActionButton(backgroundColor: Color(0xff00b6e4),onPressed: () {
-        showModalBottomSheet(
-            context: context,
-            isDismissible: false,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20))),
-            isScrollControlled: true,
-            builder: (BuildContext context) =>
-             ExpensePage());
-      },child: Icon(Icons.add),),
+      floatingActionButton: _getFAB(),
         body: Column(
       children: [
         Expanded(
@@ -297,7 +339,7 @@ class _TransactionPageState extends State<TransactionPage>
                                     decoration: BoxDecoration(
                                       borderRadius:
                                       BorderRadius.circular(40),
-                                      color: Colors.deepPurpleAccent,
+                                      color: category.color,
                                     )),
                                 SizedBox(
                                   width: 10,

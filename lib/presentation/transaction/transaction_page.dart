@@ -28,7 +28,7 @@ class _TransactionPageState extends State<TransactionPage>
 
   @override
   void initState() {
-    _tabController = TabController(vsync: this, length: 12);
+    _tabController = TabController(vsync: this, length: 12,initialIndex: (DateTime.now().month-1));
     super.initState();
   }
 
@@ -188,6 +188,7 @@ class _TransactionPageState extends State<TransactionPage>
                     unselectedLabelStyle: TextStyle(color: Colors.grey),
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicatorWeight: 3.0,
+
                     onTap: (index) {
                       context.read<ExpenseFilterCubit>().monthIndexChanged(index,context.read<ExpenseWatcherCubit>().state.maybeMap(loadSuccess:(state)=>state.expenses,orElse: ()=>[]));
                     },
@@ -213,121 +214,134 @@ class _TransactionPageState extends State<TransactionPage>
               final expense=expenses[index];
               final category=Expense.categories[expense.category];
               final isSameDay=(index!=0&&expense.date.day==expenses[index-1].date.day);
-              return Container(
-                width: double.infinity,
-                height: 60,
-                child: Row(
-                  children: [
-                    Container(
-                      width:50,
-                      child: Padding(
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: isSameDay?Column(
-                          children: List.generate(150~/10, (index) => Expanded(
-                            child: Container(
-                              color: index%2==0?Colors.transparent
-                                  :Colors.grey,
-                              width: 2,
-                            ),
-                          )),
-                        ):Column(
-                          mainAxisAlignment: (index!=(expenses.length-1)&&expense.date.day==expenses[index+1].date.day)?MainAxisAlignment.end:MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              weekDays[expense.date.weekday-1].toUpperCase(),
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[800],
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              expense.date.day.toString(),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            CircleAvatar(
-                              backgroundColor: Color(0xffb2e2ed),
-                              radius: 2,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding:  EdgeInsets.only(right: 8,left:8,top: isSameDay?2:8),
-                        child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
+              return GestureDetector(
+                onTap: (){
+                  showModalBottomSheet(
+                      context: context,
+                      isDismissible: false,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20))),
+                      isScrollControlled: true,
+                      builder: (BuildContext context) =>
+                          ExpensePage(expense: expense,));
+                },
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: Row(
+                    children: [
+                      Container(
+                        width:50,
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: isSameDay?Column(
+                            children: List.generate(150~/10, (index) => Expanded(
+                              child: Container(
+                                color: index%2==0?Colors.transparent
+                                    :Colors.grey,
+                                width: 2,
+                              ),
+                            )),
+                          ):Column(
+                            mainAxisAlignment: (index!=(expenses.length-1)&&expense.date.day==expenses[index+1].date.day)?MainAxisAlignment.end:MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                width: 10,
+                              Text(
+                                weekDays[expense.date.weekday-1].toUpperCase(),
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[800],
+                                    fontWeight: FontWeight.w500),
                               ),
-                              Container(
-                                  padding: EdgeInsets.all(12),
-                                  width: 40,
-                                  height: 40,
-                                  alignment: Alignment.center,
-                                  child: Center(
-                                      child: Icon(
-                                       category.iconData,
-                                        color: Colors.white,
-                                        size: 18,
-                                      )),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(40),
-                                    color: Colors.deepPurpleAccent,
-                                  )),
-                              SizedBox(
-                                width: 10,
+                              Text(
+                                expense.date.day.toString(),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 40,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        category.name,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      Text(
-                                        expense.expenseName.getOrCrash(),
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Text("-\$${expense.amount.getOrCrash()}",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold)),
-                              SizedBox(
-                                width: 10,
+                              CircleAvatar(
+                                backgroundColor: Color(0xffb2e2ed),
+                                radius: 2,
                               ),
                             ],
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: Padding(
+                          padding:  EdgeInsets.only(right: 8,left:8,top: isSameDay?2:8),
+                          child: Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                    padding: EdgeInsets.all(12),
+                                    width: 40,
+                                    height: 40,
+                                    alignment: Alignment.center,
+                                    child: Center(
+                                        child: Icon(
+                                         category.iconData,
+                                          color: Colors.white,
+                                          size: 18,
+                                        )),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.circular(40),
+                                      color: Colors.deepPurpleAccent,
+                                    )),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 40,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          category.name,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        Text(
+                                          expense.expenseName.getOrCrash(),
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Text("-\$${expense.amount.getOrCrash()}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             });

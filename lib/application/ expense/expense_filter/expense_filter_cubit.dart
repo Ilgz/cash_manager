@@ -12,6 +12,8 @@ class ExpenseFilterCubit extends Cubit<ExpenseFilterState> {
     emit(state.copyWith(monthIndex: monthIndex));
     updateExpenses(expenses);
   }
+  void initMonth(){
+  }
   void updateExpenses(List<Expense> expenses){
     final filteredExpenses=expenses.where((expense) => expense.date.month==(state.monthIndex+1)).toList();
     emit(state.copyWith(expenses: filteredExpenses));

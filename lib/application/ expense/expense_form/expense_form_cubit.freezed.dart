@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ExpenseFormState {
   Expense get expense => throw _privateConstructorUsedError;
   bool get showErrorMessages => throw _privateConstructorUsedError;
-  Option<Unit> get authFailureSuccessOption =>
+  Option<Either<TransactionFailure, Unit>> get authFailureSuccessOption =>
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -35,7 +35,7 @@ abstract class $ExpenseFormStateCopyWith<$Res> {
   $Res call(
       {Expense expense,
       bool showErrorMessages,
-      Option<Unit> authFailureSuccessOption});
+      Option<Either<TransactionFailure, Unit>> authFailureSuccessOption});
 
   $ExpenseCopyWith<$Res> get expense;
 }
@@ -69,7 +69,7 @@ class _$ExpenseFormStateCopyWithImpl<$Res, $Val extends ExpenseFormState>
       authFailureSuccessOption: null == authFailureSuccessOption
           ? _value.authFailureSuccessOption
           : authFailureSuccessOption // ignore: cast_nullable_to_non_nullable
-              as Option<Unit>,
+              as Option<Either<TransactionFailure, Unit>>,
     ) as $Val);
   }
 
@@ -93,7 +93,7 @@ abstract class _$$_ExpenseFormStateCopyWith<$Res>
   $Res call(
       {Expense expense,
       bool showErrorMessages,
-      Option<Unit> authFailureSuccessOption});
+      Option<Either<TransactionFailure, Unit>> authFailureSuccessOption});
 
   @override
   $ExpenseCopyWith<$Res> get expense;
@@ -126,7 +126,7 @@ class __$$_ExpenseFormStateCopyWithImpl<$Res>
       authFailureSuccessOption: null == authFailureSuccessOption
           ? _value.authFailureSuccessOption
           : authFailureSuccessOption // ignore: cast_nullable_to_non_nullable
-              as Option<Unit>,
+              as Option<Either<TransactionFailure, Unit>>,
     ));
   }
 }
@@ -144,7 +144,7 @@ class _$_ExpenseFormState implements _ExpenseFormState {
   @override
   final bool showErrorMessages;
   @override
-  final Option<Unit> authFailureSuccessOption;
+  final Option<Either<TransactionFailure, Unit>> authFailureSuccessOption;
 
   @override
   String toString() {
@@ -177,17 +177,17 @@ class _$_ExpenseFormState implements _ExpenseFormState {
 
 abstract class _ExpenseFormState implements ExpenseFormState {
   const factory _ExpenseFormState(
-          {required final Expense expense,
-          required final bool showErrorMessages,
-          required final Option<Unit> authFailureSuccessOption}) =
-      _$_ExpenseFormState;
+      {required final Expense expense,
+      required final bool showErrorMessages,
+      required final Option<Either<TransactionFailure, Unit>>
+          authFailureSuccessOption}) = _$_ExpenseFormState;
 
   @override
   Expense get expense;
   @override
   bool get showErrorMessages;
   @override
-  Option<Unit> get authFailureSuccessOption;
+  Option<Either<TransactionFailure, Unit>> get authFailureSuccessOption;
   @override
   @JsonKey(ignore: true)
   _$$_ExpenseFormStateCopyWith<_$_ExpenseFormState> get copyWith =>

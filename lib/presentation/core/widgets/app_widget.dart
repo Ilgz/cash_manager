@@ -1,4 +1,3 @@
-import 'package:cash_manager/application/%20expense/expense_actor/expense_actor_cubit.dart';
 import 'package:cash_manager/application/%20expense/expense_filter/expense_filter_cubit.dart';
 import 'package:cash_manager/application/%20expense/expense_form/expense_form_cubit.dart';
 import 'package:cash_manager/application/%20expense/expense_watcher/expense_watcher_cubit.dart';
@@ -24,12 +23,7 @@ class AppWidget extends StatelessWidget {
           getIt<ExpenseWatcherCubit>()
             ..getExpenses(),
         ),
-        BlocProvider(
-          create: (context) => getIt<ExpenseActorCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<ExpenseFormCubit>(),
-        ),
+
         BlocProvider(
           create: (context) => getIt<ExpenseFilterCubit>(),
         ),

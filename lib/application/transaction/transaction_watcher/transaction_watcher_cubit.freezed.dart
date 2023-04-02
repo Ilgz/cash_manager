@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'expense_watcher_cubit.dart';
+part of 'transaction_watcher_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,12 +15,13 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$ExpenseWatcherState {
+mixin _$TransactionWatcherState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Expense> expenses) loadSuccess,
+    required TResult Function(List<Either<Expense, Income>> transactionData)
+        loadSuccess,
     required TResult Function(TransactionFailure transactionFailure)
         loadFailure,
   }) =>
@@ -29,7 +30,8 @@ mixin _$ExpenseWatcherState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Expense> expenses)? loadSuccess,
+    TResult? Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult? Function(TransactionFailure transactionFailure)? loadFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,7 +39,8 @@ mixin _$ExpenseWatcherState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Expense> expenses)? loadSuccess,
+    TResult Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult Function(TransactionFailure transactionFailure)? loadFailure,
     required TResult orElse(),
   }) =>
@@ -70,16 +73,17 @@ mixin _$ExpenseWatcherState {
 }
 
 /// @nodoc
-abstract class $ExpenseWatcherStateCopyWith<$Res> {
-  factory $ExpenseWatcherStateCopyWith(
-          ExpenseWatcherState value, $Res Function(ExpenseWatcherState) then) =
-      _$ExpenseWatcherStateCopyWithImpl<$Res, ExpenseWatcherState>;
+abstract class $TransactionWatcherStateCopyWith<$Res> {
+  factory $TransactionWatcherStateCopyWith(TransactionWatcherState value,
+          $Res Function(TransactionWatcherState) then) =
+      _$TransactionWatcherStateCopyWithImpl<$Res, TransactionWatcherState>;
 }
 
 /// @nodoc
-class _$ExpenseWatcherStateCopyWithImpl<$Res, $Val extends ExpenseWatcherState>
-    implements $ExpenseWatcherStateCopyWith<$Res> {
-  _$ExpenseWatcherStateCopyWithImpl(this._value, this._then);
+class _$TransactionWatcherStateCopyWithImpl<$Res,
+        $Val extends TransactionWatcherState>
+    implements $TransactionWatcherStateCopyWith<$Res> {
+  _$TransactionWatcherStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -96,7 +100,7 @@ abstract class _$$_InitialCopyWith<$Res> {
 
 /// @nodoc
 class __$$_InitialCopyWithImpl<$Res>
-    extends _$ExpenseWatcherStateCopyWithImpl<$Res, _$_Initial>
+    extends _$TransactionWatcherStateCopyWithImpl<$Res, _$_Initial>
     implements _$$_InitialCopyWith<$Res> {
   __$$_InitialCopyWithImpl(_$_Initial _value, $Res Function(_$_Initial) _then)
       : super(_value, _then);
@@ -109,7 +113,7 @@ class _$_Initial implements _Initial {
 
   @override
   String toString() {
-    return 'ExpenseWatcherState.initial()';
+    return 'TransactionWatcherState.initial()';
   }
 
   @override
@@ -126,7 +130,8 @@ class _$_Initial implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Expense> expenses) loadSuccess,
+    required TResult Function(List<Either<Expense, Income>> transactionData)
+        loadSuccess,
     required TResult Function(TransactionFailure transactionFailure)
         loadFailure,
   }) {
@@ -138,7 +143,8 @@ class _$_Initial implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Expense> expenses)? loadSuccess,
+    TResult? Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult? Function(TransactionFailure transactionFailure)? loadFailure,
   }) {
     return initial?.call();
@@ -149,7 +155,8 @@ class _$_Initial implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Expense> expenses)? loadSuccess,
+    TResult Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult Function(TransactionFailure transactionFailure)? loadFailure,
     required TResult orElse(),
   }) {
@@ -197,7 +204,7 @@ class _$_Initial implements _Initial {
   }
 }
 
-abstract class _Initial implements ExpenseWatcherState {
+abstract class _Initial implements TransactionWatcherState {
   const factory _Initial() = _$_Initial;
 }
 
@@ -210,7 +217,7 @@ abstract class _$$_LoadInProgressCopyWith<$Res> {
 
 /// @nodoc
 class __$$_LoadInProgressCopyWithImpl<$Res>
-    extends _$ExpenseWatcherStateCopyWithImpl<$Res, _$_LoadInProgress>
+    extends _$TransactionWatcherStateCopyWithImpl<$Res, _$_LoadInProgress>
     implements _$$_LoadInProgressCopyWith<$Res> {
   __$$_LoadInProgressCopyWithImpl(
       _$_LoadInProgress _value, $Res Function(_$_LoadInProgress) _then)
@@ -224,7 +231,7 @@ class _$_LoadInProgress implements _LoadInProgress {
 
   @override
   String toString() {
-    return 'ExpenseWatcherState.loadInProgress()';
+    return 'TransactionWatcherState.loadInProgress()';
   }
 
   @override
@@ -241,7 +248,8 @@ class _$_LoadInProgress implements _LoadInProgress {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Expense> expenses) loadSuccess,
+    required TResult Function(List<Either<Expense, Income>> transactionData)
+        loadSuccess,
     required TResult Function(TransactionFailure transactionFailure)
         loadFailure,
   }) {
@@ -253,7 +261,8 @@ class _$_LoadInProgress implements _LoadInProgress {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Expense> expenses)? loadSuccess,
+    TResult? Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult? Function(TransactionFailure transactionFailure)? loadFailure,
   }) {
     return loadInProgress?.call();
@@ -264,7 +273,8 @@ class _$_LoadInProgress implements _LoadInProgress {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Expense> expenses)? loadSuccess,
+    TResult Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult Function(TransactionFailure transactionFailure)? loadFailure,
     required TResult orElse(),
   }) {
@@ -312,7 +322,7 @@ class _$_LoadInProgress implements _LoadInProgress {
   }
 }
 
-abstract class _LoadInProgress implements ExpenseWatcherState {
+abstract class _LoadInProgress implements TransactionWatcherState {
   const factory _LoadInProgress() = _$_LoadInProgress;
 }
 
@@ -322,12 +332,12 @@ abstract class _$$_LoadSuccessCopyWith<$Res> {
           _$_LoadSuccess value, $Res Function(_$_LoadSuccess) then) =
       __$$_LoadSuccessCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<Expense> expenses});
+  $Res call({List<Either<Expense, Income>> transactionData});
 }
 
 /// @nodoc
 class __$$_LoadSuccessCopyWithImpl<$Res>
-    extends _$ExpenseWatcherStateCopyWithImpl<$Res, _$_LoadSuccess>
+    extends _$TransactionWatcherStateCopyWithImpl<$Res, _$_LoadSuccess>
     implements _$$_LoadSuccessCopyWith<$Res> {
   __$$_LoadSuccessCopyWithImpl(
       _$_LoadSuccess _value, $Res Function(_$_LoadSuccess) _then)
@@ -336,13 +346,13 @@ class __$$_LoadSuccessCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? expenses = null,
+    Object? transactionData = null,
   }) {
     return _then(_$_LoadSuccess(
-      null == expenses
-          ? _value._expenses
-          : expenses // ignore: cast_nullable_to_non_nullable
-              as List<Expense>,
+      null == transactionData
+          ? _value._transactionData
+          : transactionData // ignore: cast_nullable_to_non_nullable
+              as List<Either<Expense, Income>>,
     ));
   }
 }
@@ -350,19 +360,20 @@ class __$$_LoadSuccessCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_LoadSuccess implements _LoadSuccess {
-  const _$_LoadSuccess(final List<Expense> expenses) : _expenses = expenses;
+  const _$_LoadSuccess(final List<Either<Expense, Income>> transactionData)
+      : _transactionData = transactionData;
 
-  final List<Expense> _expenses;
+  final List<Either<Expense, Income>> _transactionData;
   @override
-  List<Expense> get expenses {
-    if (_expenses is EqualUnmodifiableListView) return _expenses;
+  List<Either<Expense, Income>> get transactionData {
+    if (_transactionData is EqualUnmodifiableListView) return _transactionData;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_expenses);
+    return EqualUnmodifiableListView(_transactionData);
   }
 
   @override
   String toString() {
-    return 'ExpenseWatcherState.loadSuccess(expenses: $expenses)';
+    return 'TransactionWatcherState.loadSuccess(transactionData: $transactionData)';
   }
 
   @override
@@ -370,12 +381,13 @@ class _$_LoadSuccess implements _LoadSuccess {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_LoadSuccess &&
-            const DeepCollectionEquality().equals(other._expenses, _expenses));
+            const DeepCollectionEquality()
+                .equals(other._transactionData, _transactionData));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_expenses));
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_transactionData));
 
   @JsonKey(ignore: true)
   @override
@@ -388,11 +400,12 @@ class _$_LoadSuccess implements _LoadSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Expense> expenses) loadSuccess,
+    required TResult Function(List<Either<Expense, Income>> transactionData)
+        loadSuccess,
     required TResult Function(TransactionFailure transactionFailure)
         loadFailure,
   }) {
-    return loadSuccess(expenses);
+    return loadSuccess(transactionData);
   }
 
   @override
@@ -400,10 +413,11 @@ class _$_LoadSuccess implements _LoadSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Expense> expenses)? loadSuccess,
+    TResult? Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult? Function(TransactionFailure transactionFailure)? loadFailure,
   }) {
-    return loadSuccess?.call(expenses);
+    return loadSuccess?.call(transactionData);
   }
 
   @override
@@ -411,12 +425,13 @@ class _$_LoadSuccess implements _LoadSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Expense> expenses)? loadSuccess,
+    TResult Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult Function(TransactionFailure transactionFailure)? loadFailure,
     required TResult orElse(),
   }) {
     if (loadSuccess != null) {
-      return loadSuccess(expenses);
+      return loadSuccess(transactionData);
     }
     return orElse();
   }
@@ -459,10 +474,11 @@ class _$_LoadSuccess implements _LoadSuccess {
   }
 }
 
-abstract class _LoadSuccess implements ExpenseWatcherState {
-  const factory _LoadSuccess(final List<Expense> expenses) = _$_LoadSuccess;
+abstract class _LoadSuccess implements TransactionWatcherState {
+  const factory _LoadSuccess(
+      final List<Either<Expense, Income>> transactionData) = _$_LoadSuccess;
 
-  List<Expense> get expenses;
+  List<Either<Expense, Income>> get transactionData;
   @JsonKey(ignore: true)
   _$$_LoadSuccessCopyWith<_$_LoadSuccess> get copyWith =>
       throw _privateConstructorUsedError;
@@ -481,7 +497,7 @@ abstract class _$$_LoadFailureCopyWith<$Res> {
 
 /// @nodoc
 class __$$_LoadFailureCopyWithImpl<$Res>
-    extends _$ExpenseWatcherStateCopyWithImpl<$Res, _$_LoadFailure>
+    extends _$TransactionWatcherStateCopyWithImpl<$Res, _$_LoadFailure>
     implements _$$_LoadFailureCopyWith<$Res> {
   __$$_LoadFailureCopyWithImpl(
       _$_LoadFailure _value, $Res Function(_$_LoadFailure) _then)
@@ -520,7 +536,7 @@ class _$_LoadFailure implements _LoadFailure {
 
   @override
   String toString() {
-    return 'ExpenseWatcherState.loadFailure(transactionFailure: $transactionFailure)';
+    return 'TransactionWatcherState.loadFailure(transactionFailure: $transactionFailure)';
   }
 
   @override
@@ -546,7 +562,8 @@ class _$_LoadFailure implements _LoadFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Expense> expenses) loadSuccess,
+    required TResult Function(List<Either<Expense, Income>> transactionData)
+        loadSuccess,
     required TResult Function(TransactionFailure transactionFailure)
         loadFailure,
   }) {
@@ -558,7 +575,8 @@ class _$_LoadFailure implements _LoadFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Expense> expenses)? loadSuccess,
+    TResult? Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult? Function(TransactionFailure transactionFailure)? loadFailure,
   }) {
     return loadFailure?.call(transactionFailure);
@@ -569,7 +587,8 @@ class _$_LoadFailure implements _LoadFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Expense> expenses)? loadSuccess,
+    TResult Function(List<Either<Expense, Income>> transactionData)?
+        loadSuccess,
     TResult Function(TransactionFailure transactionFailure)? loadFailure,
     required TResult orElse(),
   }) {
@@ -617,7 +636,7 @@ class _$_LoadFailure implements _LoadFailure {
   }
 }
 
-abstract class _LoadFailure implements ExpenseWatcherState {
+abstract class _LoadFailure implements TransactionWatcherState {
   const factory _LoadFailure(final TransactionFailure transactionFailure) =
       _$_LoadFailure;
 

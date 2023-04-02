@@ -1,5 +1,5 @@
 import 'package:cash_manager/application/expense/expense_form/expense_form_cubit.dart';
-import 'package:cash_manager/application/expense/expense_watcher/expense_watcher_cubit.dart';
+import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
 import 'package:cash_manager/domain/transaction/expense.dart';
 import 'package:cash_manager/injection.dart';
 import 'package:cash_manager/presentation/core/widgets/failure_snackbar.dart';
@@ -29,7 +29,7 @@ class ExpensePage extends StatelessWidget {
         listener: (context, state) {
           state.authFailureSuccessOption.fold( (){
           }, (either) =>either.fold((f) => FailureSnackBar(failure: f), (_) {
-            context.read<ExpenseWatcherCubit>().getExpenses();
+            context.read<TransactionWatcherCubit>().getTransactionData();
             Navigator.pop(context);}));
         },
         child: Padding(

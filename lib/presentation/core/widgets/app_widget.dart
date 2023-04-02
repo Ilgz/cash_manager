@@ -1,5 +1,5 @@
-import 'package:cash_manager/application/expense/expense_filter/expense_filter_cubit.dart';
-import 'package:cash_manager/application/expense/expense_watcher/expense_watcher_cubit.dart';
+import 'package:cash_manager/application/transaction/transaction_filter/transaction_filter_cubit.dart';
+import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
 import 'package:cash_manager/injection.dart';
 import 'package:cash_manager/presentation/core/routes/router.dart';
 import 'package:cash_manager/presentation/core/theme.dart';
@@ -19,12 +19,12 @@ class AppWidget extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-          getIt<ExpenseWatcherCubit>()
-            ..getExpenses(),
+          getIt<TransactionWatcherCubit>()
+            ..getTransactionData(),
         ),
 
         BlocProvider(
-          create: (context) => getIt<ExpenseFilterCubit>(),
+          create: (context) => getIt<TransactionFilterCubit>(),
         ),
       ],
       child: MaterialApp.router(

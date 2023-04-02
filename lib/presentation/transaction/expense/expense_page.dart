@@ -1,9 +1,10 @@
-import 'package:cash_manager/application/%20expense/expense_form/expense_form_cubit.dart';
-import 'package:cash_manager/application/%20expense/expense_watcher/expense_watcher_cubit.dart';
+import 'package:cash_manager/application/expense/expense_form/expense_form_cubit.dart';
+import 'package:cash_manager/application/expense/expense_watcher/expense_watcher_cubit.dart';
 import 'package:cash_manager/domain/transaction/expense.dart';
 import 'package:cash_manager/injection.dart';
 import 'package:cash_manager/presentation/core/widgets/failure_snackbar.dart';
-import 'package:cash_manager/presentation/transaction/widgets/expense_name.dart';
+import 'package:cash_manager/presentation/transaction/widgets/transaction_amount.dart';
+import 'package:cash_manager/presentation/transaction/widgets/transaction_name.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +32,6 @@ class ExpensePage extends StatelessWidget {
           }, (either) =>either.fold((f) => FailureSnackBar(failure: f), (_) {
             context.read<ExpenseWatcherCubit>().getExpenses();
             Navigator.pop(context);}));
-
         },
         child: Padding(
             padding: EdgeInsets.only(top: 30, left: 30, right: 30),
@@ -64,7 +64,7 @@ class ExpensePage extends StatelessWidget {
                 ),
                 BlocBuilder<ExpenseFormCubit, ExpenseFormState>(
                   builder: (context, state) {
-                    return ExpenseNameWidget(
+                    return TransactionName(
                       state: left(state),
                       controller: _nameController, onChanged: (value){
                       context.read<ExpenseFormCubit>().nameChanged(value);
@@ -76,8 +76,10 @@ class ExpensePage extends StatelessWidget {
                 BlocBuilder<ExpenseFormCubit, ExpenseFormState>(
                   builder: (context, state) {
                     return AmountWidget(
-                      state: state,
-                      controller: _amountController,
+                      state: left(state),
+                      controller: _amountController, onChanged: (String value) {
+                      context.read<ExpenseFormCubit>().amountChanged(value);
+                    },
                     );
                   },
                 ),
@@ -226,78 +228,6 @@ class ExpensePage extends StatelessWidget {
 
 
 
-class AmountWidget extends StatelessWidget {
-  const AmountWidget({
-    super.key,
-    required this.state,
-    required this.controller,
-  });
 
-  final ExpenseFormState state;
-  final TextEditingController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          (!state.showErrorMessages || state.expense.amount.value.isRight())
-              ? "Amount"
-              : state.expense.amount.value.fold(
-                  (f) => f.maybeMap(
-                      empty: (_) => 'Empty value',
-                      isLessThanZero: (_) => 'Must be greater than zero',
-                      orElse: () => ""),
-                  (_) => ""),
-          style: TextStyle(
-              fontSize: 12,
-              color: (!state.showErrorMessages ||
-                      state.expense.amount.value.isRight())
-                  ? Colors.grey[800]
-                  : Colors.red),
-        ),
-        SizedBox(height: 4),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-              color: Colors.grey[200],
-              border: Border.all(
-                  color: (!state.showErrorMessages ||
-                          state.expense.amount.value.isRight())
-                      ? Colors.grey[500]!
-                      : Colors.red),
-              borderRadius: BorderRadius.circular(8)),
-          child: IntrinsicHeight(
-            child: Row(
-              children: [
-                Text("\$",                style: Theme.of(context).textTheme.bodyText1,
-                ),
-                SizedBox(width: 10,),
-                VerticalDivider(width:1,indent: 5,endIndent: 5,color: Colors.grey,),
-                SizedBox(width: 10,),
-                Expanded(
-                  child: TextField(
-                    controller: controller,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly                  ],
-                    style: Theme.of(context).textTheme.bodyText1,
-                    cursorColor: Theme.of(context).primaryColor,
-                    decoration: const InputDecoration(
-                        hintText: "Amount", border: InputBorder.none, isDense: true),
-                    onChanged: (text) {
-                      context.read<ExpenseFormCubit>().amountChanged(text);
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 

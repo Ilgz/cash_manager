@@ -1,5 +1,5 @@
-import 'package:cash_manager/application/%20expense/expense_filter/expense_filter_cubit.dart';
-import 'package:cash_manager/application/%20expense/expense_watcher/expense_watcher_cubit.dart';
+import 'package:cash_manager/application/expense/expense_filter/expense_filter_cubit.dart';
+import 'package:cash_manager/application/expense/expense_watcher/expense_watcher_cubit.dart';
 import 'package:cash_manager/domain/transaction/expense.dart';
 import 'package:cash_manager/presentation/core/constants.dart';
 import 'package:cash_manager/presentation/core/widgets/critical_failure_card.dart';

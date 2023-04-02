@@ -1,6 +1,5 @@
-import 'package:cash_manager/application/%20expense/expense_filter/expense_filter_cubit.dart';
-import 'package:cash_manager/application/%20expense/expense_form/expense_form_cubit.dart';
-import 'package:cash_manager/application/%20expense/expense_watcher/expense_watcher_cubit.dart';
+import 'package:cash_manager/application/expense/expense_filter/expense_filter_cubit.dart';
+import 'package:cash_manager/application/expense/expense_watcher/expense_watcher_cubit.dart';
 import 'package:cash_manager/injection.dart';
 import 'package:cash_manager/presentation/core/routes/router.dart';
 import 'package:cash_manager/presentation/core/theme.dart';

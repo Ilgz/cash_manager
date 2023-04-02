@@ -1,10 +1,10 @@
-import 'package:cash_manager/application/%20expense/expense_form/expense_form_cubit.dart';
+import 'package:cash_manager/application/expense/expense_form/expense_form_cubit.dart';
 import 'package:cash_manager/application/income/income_form/income_form_cubit.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-class TransactionNameWidget extends StatelessWidget {
-  const TransactionNameWidget({
+class TransactionName extends StatelessWidget {
+  const TransactionName({
     super.key,
     required this.state, required this.controller, required this.onChanged,
   });

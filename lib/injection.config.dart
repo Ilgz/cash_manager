@@ -9,11 +9,11 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:cash_manager/application/%20expense/expense_filter/expense_filter_cubit.dart'
+import 'package:cash_manager/application/expense/expense_filter/expense_filter_cubit.dart'
     as _i7;
-import 'package:cash_manager/application/%20expense/expense_form/expense_form_cubit.dart'
+import 'package:cash_manager/application/expense/expense_form/expense_form_cubit.dart'
     as _i10;
-import 'package:cash_manager/application/%20expense/expense_watcher/expense_watcher_cubit.dart'
+import 'package:cash_manager/application/expense/expense_watcher/expense_watcher_cubit.dart'
     as _i11;
 import 'package:cash_manager/domain/transaction/i_transaction_repository.dart'
     as _i8;

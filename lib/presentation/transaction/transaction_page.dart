@@ -285,14 +285,14 @@ class _TransactionPageState extends State<TransactionPage>
                                                 transactions[index - 1].fold(
                                                     (expense) =>
                                                         expense.date.day,
-                                                    (_) => false));
+                                                    (income) => income.date.day));
                                         final isNextSameDay = (index !=
                                                 transactions.length - 1 &&
                                             expense.date.day ==
                                                 transactions[index + 1].fold(
                                                     (expense) =>
                                                         expense.date.day,
-                                                    (_) => false));
+                                                        (income) => income.date.day));
                                         return TransactionCard(
                                           weekDay:
                                               weekDays[expense.date.weekday - 1]
@@ -331,14 +331,14 @@ class _TransactionPageState extends State<TransactionPage>
                                                 transactions[index - 1].fold(
                                                         (expense) =>
                                                     expense.date.day,
-                                                        (_) => false));
+                                                        (income) => income.date.day));
                                         final isNextSameDay = (index !=
                                             transactions.length - 1 &&
                                             income.date.day ==
                                                 transactions[index + 1].fold(
                                                         (expense) =>
                                                     expense.date.day,
-                                                        (_) => false));
+                                                        (income) => income.date.day));
                                         return TransactionCard(
                                           weekDay:
                                           weekDays[income.date.weekday - 1]

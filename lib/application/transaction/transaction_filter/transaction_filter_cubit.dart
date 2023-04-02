@@ -17,7 +17,15 @@ class TransactionFilterCubit extends Cubit<TransactionFilterState> {
     updateTransactions(transactions);
   }
   void updateTransactions(List<Either<Expense,Income>> transactions){
-    final filteredExpenses=transactions.where((transaction) => transaction.fold((expense) => expense.date.month==(state.monthIndex+1), (income) => income.date.month==(state.monthIndex+1))).toList();
-    emit(state.copyWith(transactions: filteredExpenses));
+    var expenses=transactions.where((transaction) => transaction.fold((expense) => expense.date.month==(state.monthIndex+1), (income) => income.date.month==(state.monthIndex+1))).toList();
+    expenses
+        .sort((a, b) {
+          return a.fold((foldedA) {
+            return  foldedA.date.compareTo(b.fold((foldedB) => foldedB.date, (foldedB) => foldedB.date));
+          }, (foldedB) {
+            return  foldedB.date.compareTo(a.fold((foldedA) => foldedA.date, (foldedA) => foldedA.date));
+          });
+         });
+    emit(state.copyWith(transactions: expenses));
   }
 }

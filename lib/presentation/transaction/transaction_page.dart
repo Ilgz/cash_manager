@@ -4,6 +4,7 @@ import 'package:cash_manager/domain/transaction/category.dart';
 import 'package:cash_manager/domain/transaction/expense.dart';
 import 'package:cash_manager/domain/transaction/income.dart';
 import 'package:cash_manager/presentation/core/constants.dart';
+import 'package:cash_manager/presentation/core/routes/router.dart';
 import 'package:cash_manager/presentation/core/widgets/critical_failure_card.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_progress_indicator.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_scaffold.dart';
@@ -212,19 +213,24 @@ class _TransactionPageState extends State<TransactionPage>
                                     ],
                                   ),
                                   Spacer(),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 10),
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.4),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: Text(
-                                      "View detail",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white,
+                                  GestureDetector(
+                                    onTap: (){
+                                      goToDetailPage(context);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey.withOpacity(0.4),
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Text(
+                                        "View detail",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   )

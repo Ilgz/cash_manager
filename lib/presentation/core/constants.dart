@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 class PageRoutes{
   static const transactionPage="/transaction";
-  static const goalPage="/goal";
-  static const expensePage="expense";
+  static const detailPage="detailPage";
   static const profilePage="profile_page";
 }
 class AppColorConstants{

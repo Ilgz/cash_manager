@@ -1,5 +1,5 @@
 import 'package:cash_manager/presentation/core/constants.dart';
-import 'package:cash_manager/presentation/goals/goal_page.dart';
+import 'package:cash_manager/presentation/detail/detail_page.dart';
 import 'package:cash_manager/presentation/transaction/expense/expense_page.dart';
 import 'package:cash_manager/presentation/transaction/transaction_page.dart';
 import 'package:dartz/dartz.dart';
@@ -15,31 +15,24 @@ final goRouter =
     pageBuilder: (context, state) =>  const NoTransitionPage(
       child: TransactionPage(),
     ),
-  ),
+    routes: [
       GoRoute(
-        path: PageRoutes.goalPage,
+        path: PageRoutes.detailPage,
         pageBuilder: (context, state) =>  NoTransitionPage(
-          child: GoalPage(),
+          child: DetailPage(),
         ),
-        routes:[
-          GoRoute(
-            path: PageRoutes.expensePage,
-            pageBuilder: (context, state) =>   NoTransitionPage(
-              child: ExpensePage(),
-            ),
-          ),
-        ]
       ),
+    ]
+  ),
+
 
 ]);
 
 void goToSignInPage(BuildContext context) => context.pushReplacement(
       PageRoutes.transactionPage,
     );
-void goToGoalPage(BuildContext context) => context.pushReplacement(
-  PageRoutes.goalPage,
-);
-void goToExpensePage(BuildContext context) => context.pushReplacement(
-  "${PageRoutes.transactionPage}/${PageRoutes.expensePage}",
+
+void goToDetailPage(BuildContext context) => context.push(
+  "${PageRoutes.transactionPage}/${PageRoutes.detailPage}",
 );
 

@@ -15,8 +15,8 @@ void main() async {
   Hive.registerAdapter(IncomeDtoAdapter());
   WidgetsFlutterBinding.ensureInitialized();
   await configureInjection(Environment.prod);
-
   runApp(const AppWidget());
+
 }
 
 

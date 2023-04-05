@@ -89,122 +89,125 @@ class FlowCard extends StatelessWidget {
               expensePercentage =
                   Tuple2(expenseIsRising, outflowPercentageDiff);
 
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                          backgroundColor: Colors.grey[300],
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              isInflow
-                                  ? Icons.arrow_upward_outlined
-                                  : Icons.arrow_downward_outlined,
-                              color: isInflow ? Colors.green : Colors.red[900],
-                              size: 24,
-                            ),
-                          )),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        isInflow ? "Inflow" : "Outflow",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('\$'.toUpperCase(),
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.grey)),
-                              Text(
-                                state.maybeMap(
-                                  loadSuccess: (state) {
-                                    double balance = 0;
-                                    for (var transaction
-                                        in state.transactionData) {
-                                      if (isInflow) {
-                                        transaction.fold((_) {}, (income) {
-                                          if (income.date.month ==
-                                              DateTime.now().month) {
-                                            balance +=
-                                                income.amount.getOrCrash();
-                                          }
-                                        });
-                                      } else {
-                                        transaction.fold(
-                                          (expense) {
-                                            if (expense.date.month ==
+              return SizedBox(
+                width: double.infinity,
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                            backgroundColor: Colors.grey[300],
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                isInflow
+                                    ? Icons.arrow_upward_outlined
+                                    : Icons.arrow_downward_outlined,
+                                color: isInflow ? Colors.green : Colors.red[900],
+                                size: 24,
+                              ),
+                            )),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          isInflow ? "Inflow" : "Outflow",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('\$'.toUpperCase(),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey)),
+                                Text(
+                                  state.maybeMap(
+                                    loadSuccess: (state) {
+                                      double balance = 0;
+                                      for (var transaction
+                                          in state.transactionData) {
+                                        if (isInflow) {
+                                          transaction.fold((_) {}, (income) {
+                                            if (income.date.month ==
                                                 DateTime.now().month) {
                                               balance +=
-                                                  expense.amount.getOrCrash();
+                                                  income.amount.getOrCrash();
                                             }
-                                          },
-                                          (_) {},
-                                        );
+                                          });
+                                        } else {
+                                          transaction.fold(
+                                            (expense) {
+                                              if (expense.date.month ==
+                                                  DateTime.now().month) {
+                                                balance +=
+                                                    expense.amount.getOrCrash();
+                                              }
+                                            },
+                                            (_) {},
+                                          );
+                                        }
                                       }
-                                    }
-                                    String rawBalance =
-                                        balance.toInt().toString();
-                                    late String formattedBalance;
-                                    if (rawBalance.length == 4) {
-                                      formattedBalance = NumberFormat('#,###')
-                                          .format(balance.toInt());
-                                    } else if (rawBalance.length == 5) {
-                                      formattedBalance = NumberFormat('##,###')
-                                          .format(balance.toInt());
-                                    } else {
-                                      formattedBalance = rawBalance;
-                                    }
-                                    return formattedBalance;
-                                  },
-                                  orElse: () => '0',
+                                      String rawBalance =
+                                          balance.toInt().toString();
+                                      late String formattedBalance;
+                                      if (rawBalance.length == 4) {
+                                        formattedBalance = NumberFormat('#,###')
+                                            .format(balance.toInt());
+                                      } else if (rawBalance.length == 5) {
+                                        formattedBalance = NumberFormat('##,###')
+                                            .format(balance.toInt());
+                                      } else {
+                                        formattedBalance = rawBalance;
+                                      }
+                                      return formattedBalance;
+                                    },
+                                    orElse: () => '0',
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                                 ),
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Visibility(
-                                  visible: (isInflow
-                                      ? previousMonthIncome != 0
-                                      : previousMonthExpense != 0),
-                                  child: Text(
-                                    "${isInflow ? incomePercentage.last : expensePercentage.last}%",
-                                    style: TextStyle(
-                                        color: isInflow
-                                            ? (incomePercentage.value1
-                                                ? Colors.green
-                                                : Colors.red)
-                                            : (expensePercentage.value1
-                                                ? Colors.red
-                                                : Colors.green),
-                                        fontSize: 12),
-                                  )),
-                              Text(
-                                "${(isInflow ? previousMonthIncome != 0 : previousMonthExpense != 0) ? "" : "no data"} from the previous month",
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Visibility(
+                                    visible: (isInflow
+                                        ? previousMonthIncome != 0
+                                        : previousMonthExpense != 0),
+                                    child: Text(
+                                      "${isInflow ? incomePercentage.last : expensePercentage.last}%",
+                                      style: TextStyle(
+                                          color: isInflow
+                                              ? (incomePercentage.value1
+                                                  ? Colors.green
+                                                  : Colors.red)
+                                              : (expensePercentage.value1
+                                                  ? Colors.red
+                                                  : Colors.green),
+                                          fontSize: 12),
+                                    )),
+                                Text(
+                                  "${(isInflow ? previousMonthIncome != 0 : previousMonthExpense != 0) ? "" : "no data"} from the previous month",
+                                  style:
+                                      TextStyle(color: Colors.grey, fontSize: 12),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

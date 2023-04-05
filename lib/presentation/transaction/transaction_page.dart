@@ -5,6 +5,7 @@ import 'package:cash_manager/domain/transaction/expense.dart';
 import 'package:cash_manager/domain/transaction/income.dart';
 import 'package:cash_manager/presentation/core/constants.dart';
 import 'package:cash_manager/presentation/core/routes/router.dart';
+import 'package:cash_manager/presentation/core/utils/balance_formatter.dart';
 import 'package:cash_manager/presentation/core/widgets/critical_failure_card.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_progress_indicator.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_scaffold.dart';
@@ -42,45 +43,43 @@ class _TransactionPageState extends State<TransactionPage>
   Widget _getFAB() {
     return SpeedDial(
       icon: Icons.add,
-      iconTheme: IconThemeData(size: 22),
-      backgroundColor: Color(0xff00b6e4),
+      iconTheme: const IconThemeData(size: 22),
+      backgroundColor: const Color(0xff00b6e4),
       visible: true,
       curve: Curves.bounceIn,
       children: [
         SpeedDialChild(
-          child: Icon(Icons.money_off, color: Color(0xff0039a5)),
+          child: const Icon(Icons.money_off, color: Color(0xff0039a5)),
           backgroundColor: Colors.white,
           onTap: () {
             showModalBottomSheet(
                 context: context,
                 isDismissible: false,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20))),
                 isScrollControlled: true,
                 builder: (BuildContext context) => ExpensePage());
           },
           label: 'Expense',
-          labelStyle: TextStyle(
+          labelStyle: const TextStyle(
               fontWeight: FontWeight.w500, color: Colors.black, fontSize: 16.0),
-          // labelBackgroundColor: Color(0xFF801E48)
         ),
-        // FAB 2
         SpeedDialChild(
-          child: Icon(Icons.attach_money, color: Color(0xff0039a5)),
+          child: const Icon(Icons.attach_money, color: Color(0xff0039a5)),
           backgroundColor: Colors.white,
           onTap: () {
             showModalBottomSheet(
                 context: context,
                 isDismissible: false,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                     borderRadius:
                     BorderRadius.vertical(top: Radius.circular(20))),
                 isScrollControlled: true,
                 builder: (BuildContext context) => IncomePage());
           },
           label: 'Income ',
-          labelStyle: TextStyle(
+          labelStyle: const TextStyle(
               fontWeight: FontWeight.w500, color: Colors.black, fontSize: 16.0),
         )
       ],
@@ -101,62 +100,60 @@ class _TransactionPageState extends State<TransactionPage>
                       left: 0,
                       right: 0,
                       child: Container(
-                        color: Color(0xff0039a5),
+                        color: const Color(0xff0039a5),
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Column(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 30,
                               ),
                               Row(
                                 children: [
-                                  Container(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Hi, Ilgiz",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
-                                        ),
-                                        Text(
-                                          "Good morning",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey),
-                                        )
-                                      ],
-                                    ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Hi, Ilgiz",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                      const Text(
+                                        "Good morning",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey),
+                                      )
+                                    ],
                                   ),
-                                  Spacer(),
-                                  Icon(
+                                  const Spacer(),
+                                  const Icon(
                                     Icons.notifications,
                                     color: Colors.white,
                                     size: 24,
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               Row(
                                 children: [
-                                  CircleAvatar(
+                                  const CircleAvatar(
                                       backgroundColor: Color(0xff00b5e6),
                                       child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: EdgeInsets.all(8.0),
                                         child: Icon(
                                           Icons.account_balance_wallet_outlined,
                                           color: Colors.white,
                                           size: 24,
                                         ),
                                       )),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   Column(
@@ -164,7 +161,7 @@ class _TransactionPageState extends State<TransactionPage>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text('total amount'.toUpperCase(),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey)),
@@ -173,7 +170,7 @@ class _TransactionPageState extends State<TransactionPage>
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text('\$'.toUpperCase(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.grey)),
@@ -185,22 +182,10 @@ class _TransactionPageState extends State<TransactionPage>
         for(var transaction in state.transactionData){
           transaction.fold((expense) => balance-=expense.amount.getOrCrash(), (income) => balance+=income.amount.getOrCrash());
         }
-        String rawBalance=balance.toInt().toString();
-        late String formattedBalance;
-        if(rawBalance.length==4){
-          print(rawBalance);
-          formattedBalance = NumberFormat('#,###').format(balance.toInt());
-        }
-        else if(rawBalance.length==5){
-          formattedBalance = NumberFormat('##,###').format(balance.toInt());
-        }
-        else{
-          formattedBalance=rawBalance;
-       }
-          return formattedBalance;
+       return formatBalance(balance);
       },orElse: ()=>
       '0',),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 24,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
@@ -212,19 +197,19 @@ class _TransactionPageState extends State<TransactionPage>
                                       )
                                     ],
                                   ),
-                                  Spacer(),
+                                  const Spacer(),
                                   GestureDetector(
                                     onTap: (){
                                       goToDetailPage(context);
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 5, horizontal: 10),
                                       decoration: BoxDecoration(
                                           color: Colors.grey.withOpacity(0.4),
                                           borderRadius:
                                               BorderRadius.circular(20)),
-                                      child: Text(
+                                      child: const Text(
                                         "View detail",
                                         style: TextStyle(
                                           fontSize: 12,
@@ -236,7 +221,7 @@ class _TransactionPageState extends State<TransactionPage>
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 100,
                               ),
                             ],
@@ -259,10 +244,10 @@ class _TransactionPageState extends State<TransactionPage>
                 child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: TabBar(
-                        indicatorColor: Color(0xff86c1d2),
-                        labelStyle: TextStyle(
+                        indicatorColor: const Color(0xff86c1d2),
+                        labelStyle: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
-                        unselectedLabelStyle: TextStyle(color: Colors.grey),
+                        unselectedLabelStyle: const TextStyle(color: Colors.grey),
                         indicatorSize: TabBarIndicatorSize.tab,
                         indicatorWeight: 3.0,
                         onTap: (index) {
@@ -289,8 +274,8 @@ class _TransactionPageState extends State<TransactionPage>
                     TransactionWatcherState>(
                   builder: (context, state) {
                     return state.map(
-                        initial: (_) => SizedBox(),
-                        loadInProgress: (_) => CustomProgressIndicator(),
+                        initial: (_) => const SizedBox(),
+                        loadInProgress: (_) => const CustomProgressIndicator(),
                         loadSuccess: (successState) {
                           context
                               .read<TransactionFilterCubit>()
@@ -333,7 +318,7 @@ class _TransactionPageState extends State<TransactionPage>
                                             showModalBottomSheet(
                                                 context: context,
                                                 isDismissible: false,
-                                                shape: RoundedRectangleBorder(
+                                                shape: const RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.vertical(
                                                             top:
@@ -379,7 +364,7 @@ class _TransactionPageState extends State<TransactionPage>
                                             showModalBottomSheet(
                                                 context: context,
                                                 isDismissible: false,
-                                                shape: RoundedRectangleBorder(
+                                                shape: const RoundedRectangleBorder(
                                                     borderRadius:
                                                     BorderRadius.vertical(
                                                         top:
@@ -403,7 +388,7 @@ class _TransactionPageState extends State<TransactionPage>
                                     });
                               } else {
                                 return Container(
-                                    margin: EdgeInsets.only(top: 20),
+                                    margin: const EdgeInsets.only(top: 20),
                                     alignment: Alignment.topCenter,
                                     child: Text(
                                       "There are no transactions for the selected period.",
@@ -489,11 +474,11 @@ class TransactionCard extends StatelessWidget {
                           ),
                           Text(
                             day,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),
-                          CircleAvatar(
+                          const CircleAvatar(
                             backgroundColor: Color(0xffb2e2ed),
                             radius: 2,
                           ),
@@ -514,11 +499,11 @@ class TransactionCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Container(
-                          padding: EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(12),
                           width: 40,
                           height: 40,
                           alignment: Alignment.center,
@@ -532,7 +517,7 @@ class TransactionCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(40),
                             color: category.color,
                           )),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Expanded(
@@ -544,13 +529,13 @@ class TransactionCard extends StatelessWidget {
                             children: [
                               Text(
                                 category.name,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
                                 transactionName,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
                                     fontWeight: FontWeight.w500),
@@ -560,10 +545,10 @@ class TransactionCard extends StatelessWidget {
                         ),
                       ),
                       Text(amountStr,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                     ],

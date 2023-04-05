@@ -165,26 +165,7 @@ class DetailPage extends StatelessWidget {
                   FlowCard(
                     isInflow: false,
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Outflow detail",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                  Text(
-                    "You can check where your money come and gone here",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
+
                   BlocBuilder<TransactionWatcherCubit, TransactionWatcherState>(
                     builder: (context, state) {
                       return state.maybeMap(
@@ -198,15 +179,35 @@ class DetailPage extends StatelessWidget {
                             }
                             final top4Categories =
                                 getTop4Categories(expenseList);
-                            return Column(
+                            return top4Categories.isEmpty?SizedBox():Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // HorizontalExpenseChart(
-                                //     values: top4Categories.values.toList(),
-                                //     colors: top4Categories.keys
-                                //         .map((category) => category.color)
-                                //         .toList()),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "Outflow detail",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black),
+                                ),
+                                Text(
+                                  "You can check where your money come and gone here",
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                HorizontalExpenseChart(
+                                    values: top4Categories.values.toList(),
+                                    colors: top4Categories.keys
+                                        .map((category) => category.color)
+                                        .toList()),
                                 SizedBox(height: 10,),
-
                                 Row(children: [
                                   CategoryExpenseStat(index:0,length:top4Categories.length,top4Categories: top4Categories),
                                   CategoryExpenseStat(index:1,length:top4Categories.length,top4Categories: top4Categories)

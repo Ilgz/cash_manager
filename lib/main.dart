@@ -16,7 +16,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureInjection(Environment.prod);
   runApp(const AppWidget());
-
+  List<String> pupils=[];
+  final a=pupils.map((e) => e+"Hei").toList();
+print(a);
 }
 
 

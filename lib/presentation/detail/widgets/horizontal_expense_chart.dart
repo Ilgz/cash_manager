@@ -6,6 +6,9 @@ class HorizontalExpenseChart extends StatelessWidget {
   const HorizontalExpenseChart({super.key, required this.values, required this.colors});
   @override
   Widget build(BuildContext context) {
+    if(values.isEmpty){
+      return SizedBox();
+    }else{
     int total = values.reduce((a, b) => a + b);
     return Row(
       children: values.asMap().entries.map((entry) {
@@ -40,5 +43,7 @@ class HorizontalExpenseChart extends StatelessWidget {
         );
       }).toList(),
     );
+    }
+
   }
 }

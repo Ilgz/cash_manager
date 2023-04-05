@@ -9,8 +9,8 @@ import 'package:cash_manager/presentation/core/widgets/app_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
-
 void main() async {
+ await Hive.initFlutter();
   Hive.registerAdapter(ExpenseDtoAdapter());
   Hive.registerAdapter(IncomeDtoAdapter());
   WidgetsFlutterBinding.ensureInitialized();

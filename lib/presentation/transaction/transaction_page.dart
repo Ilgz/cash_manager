@@ -2,21 +2,21 @@ import 'package:cash_manager/application/transaction/transaction_filter/transact
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
 import 'package:cash_manager/domain/transaction/category.dart';
 import 'package:cash_manager/domain/transaction/expense.dart';
-import 'package:cash_manager/domain/transaction/income.dart';
 import 'package:cash_manager/presentation/core/constants.dart';
 import 'package:cash_manager/presentation/core/routes/router.dart';
 import 'package:cash_manager/presentation/core/utils/balance_formatter.dart';
+import 'package:cash_manager/presentation/core/utils/bottom_sheet_helpers.dart';
 import 'package:cash_manager/presentation/core/widgets/critical_failure_card.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_progress_indicator.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_scaffold.dart';
 import 'package:cash_manager/presentation/transaction/expense/expense_page.dart';
 import 'package:cash_manager/presentation/transaction/income/income_page.dart';
+import 'package:cash_manager/presentation/transaction/widgets/custom_fab.dart';
 import 'package:cash_manager/presentation/transaction/widgets/income_expense_chart.dart';
-import 'package:dartz/dartz.dart' hide State;
+import 'package:cash_manager/presentation/transaction/widgets/transaction_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:intl/intl.dart';
+
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
 
@@ -40,56 +40,10 @@ class _TransactionPageState extends State<TransactionPage>
     super.initState();
   }
 
-  Widget _getFAB() {
-    return SpeedDial(
-      icon: Icons.add,
-      iconTheme: const IconThemeData(size: 22),
-      backgroundColor: const Color(0xff00b6e4),
-      visible: true,
-      curve: Curves.bounceIn,
-      children: [
-        SpeedDialChild(
-          child: const Icon(Icons.money_off, color: Color(0xff0039a5)),
-          backgroundColor: Colors.white,
-          onTap: () {
-            showModalBottomSheet(
-                context: context,
-                isDismissible: false,
-                shape: const RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20))),
-                isScrollControlled: true,
-                builder: (BuildContext context) => ExpensePage());
-          },
-          label: 'Expense',
-          labelStyle: const TextStyle(
-              fontWeight: FontWeight.w500, color: Colors.black, fontSize: 16.0),
-        ),
-        SpeedDialChild(
-          child: const Icon(Icons.attach_money, color: Color(0xff0039a5)),
-          backgroundColor: Colors.white,
-          onTap: () {
-            showModalBottomSheet(
-                context: context,
-                isDismissible: false,
-                shape: const RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(20))),
-                isScrollControlled: true,
-                builder: (BuildContext context) => IncomePage());
-          },
-          label: 'Income ',
-          labelStyle: const TextStyle(
-              fontWeight: FontWeight.w500, color: Colors.black, fontSize: 16.0),
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        floatingActionButton: _getFAB(),
+        floatingActionButton: const CustomFAB(),
         body: Column(
           children: [
             Expanded(
@@ -174,32 +128,45 @@ class _TransactionPageState extends State<TransactionPage>
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.grey)),
-                                          BlocBuilder<TransactionWatcherCubit, TransactionWatcherState>(
-  builder: (context, state) {
-    return Text(
-      state.maybeMap(loadSuccess:(state){
-        double balance=0;
-        for(var transaction in state.transactionData){
-          transaction.fold((expense) => balance-=expense.amount.getOrCrash(), (income) => balance+=income.amount.getOrCrash());
-        }
-       return formatBalance(balance);
-      },orElse: ()=>
-      '0',),
-                                            style: const TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
-                                          );
-  },
-),
+                                          BlocBuilder<TransactionWatcherCubit,
+                                              TransactionWatcherState>(
+                                            builder: (context, state) {
+                                              return Text(
+                                                state.maybeMap(
+                                                  loadSuccess: (state) {
+                                                    double balance = 0;
+                                                    for (var transaction
+                                                        in state
+                                                            .transactionData) {
+                                                      transaction.fold(
+                                                          (expense) =>
+                                                              balance -= expense
+                                                                  .amount
+                                                                  .getOrCrash(),
+                                                          (income) => balance +=
+                                                              income.amount
+                                                                  .getOrCrash());
+                                                    }
+                                                    return formatBalance(
+                                                        balance);
+                                                  },
+                                                  orElse: () => '0',
+                                                ),
+                                                style: const TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ],
                                       )
                                     ],
                                   ),
                                   const Spacer(),
                                   GestureDetector(
-                                    onTap: (){
+                                    onTap: () {
                                       goToDetailPage(context);
                                     },
                                     child: Container(
@@ -247,7 +214,8 @@ class _TransactionPageState extends State<TransactionPage>
                         indicatorColor: const Color(0xff86c1d2),
                         labelStyle: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
-                        unselectedLabelStyle: const TextStyle(color: Colors.grey),
+                        unselectedLabelStyle:
+                            const TextStyle(color: Colors.grey),
                         indicatorSize: TabBarIndicatorSize.tab,
                         indicatorWeight: 3.0,
                         onTap: (index) {
@@ -298,14 +266,16 @@ class _TransactionPageState extends State<TransactionPage>
                                                 transactions[index - 1].fold(
                                                     (expense) =>
                                                         expense.date.day,
-                                                    (income) => income.date.day));
+                                                    (income) =>
+                                                        income.date.day));
                                         final isNextSameDay = (index !=
                                                 transactions.length - 1 &&
                                             expense.date.day ==
                                                 transactions[index + 1].fold(
                                                     (expense) =>
                                                         expense.date.day,
-                                                        (income) => income.date.day));
+                                                    (income) =>
+                                                        income.date.day));
                                         return TransactionCard(
                                           weekDay:
                                               weekDays[expense.date.weekday - 1]
@@ -315,21 +285,11 @@ class _TransactionPageState extends State<TransactionPage>
                                           transactions: transactions,
                                           category: category,
                                           onClicked: () {
-                                            showModalBottomSheet(
-                                                context: context,
-                                                isDismissible: false,
-                                                shape: const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.vertical(
-                                                            top:
-                                                                Radius.circular(
-                                                                    20))),
-                                                isScrollControlled: true,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        ExpensePage(
-                                                          expense: expense,
-                                                        ));
+                                            showCustomModalBottomSheet(
+                                                context,
+                                                ExpensePage(
+                                                  expense: expense,
+                                                ));
                                           },
                                           transactionName:
                                               expense.expenseName.getOrCrash(),
@@ -337,51 +297,45 @@ class _TransactionPageState extends State<TransactionPage>
                                               "-\$${expense.amount.getOrCrash()}",
                                           day: expense.date.day.toString(),
                                         );
-                                      }, (income){
-                                        final category = ExpenseCategory("Income", Icons.attach_money, Colors.yellow);
+                                      }, (income) {
+                                        final category = ExpenseCategory(
+                                            "Income",
+                                            Icons.attach_money,
+                                            Colors.yellow);
                                         final isPreviousSameDay = (index != 0 &&
                                             income.date.day ==
                                                 transactions[index - 1].fold(
-                                                        (expense) =>
-                                                    expense.date.day,
-                                                        (income) => income.date.day));
+                                                    (expense) =>
+                                                        expense.date.day,
+                                                    (income) =>
+                                                        income.date.day));
                                         final isNextSameDay = (index !=
-                                            transactions.length - 1 &&
+                                                transactions.length - 1 &&
                                             income.date.day ==
                                                 transactions[index + 1].fold(
-                                                        (expense) =>
-                                                    expense.date.day,
-                                                        (income) => income.date.day));
+                                                    (expense) =>
+                                                        expense.date.day,
+                                                    (income) =>
+                                                        income.date.day));
                                         return TransactionCard(
                                           weekDay:
-                                          weekDays[income.date.weekday - 1]
-                                              .toUpperCase(),
+                                              weekDays[income.date.weekday - 1]
+                                                  .toUpperCase(),
                                           isPreviousSameDay: isPreviousSameDay,
                                           isNextSameDay: isNextSameDay,
                                           transactions: transactions,
                                           category: category,
                                           onClicked: () {
-                                            showModalBottomSheet(
-                                                context: context,
-                                                isDismissible: false,
-                                                shape: const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                    BorderRadius.vertical(
-                                                        top:
-                                                        Radius.circular(
-                                                            20))),
-                                                isScrollControlled: true,
-
-                                                builder:
-                                                    (BuildContext context) =>
-                                                    IncomePage(
-                                                      income:income,
-                                                    ));
+                                            showCustomModalBottomSheet(
+                                                context,
+                                                IncomePage(
+                                                  income: income,
+                                                ));
                                           },
                                           transactionName:
-                                          income.incomeName.getOrCrash(),
+                                              income.incomeName.getOrCrash(),
                                           amountStr:
-                                          "+\$${income.amount.getOrCrash()}",
+                                              "+\$${income.amount.getOrCrash()}",
                                           day: income.date.day.toString(),
                                         );
                                       });
@@ -405,160 +359,5 @@ class _TransactionPageState extends State<TransactionPage>
             )
           ],
         ));
-  }
-}
-
-class TransactionCard extends StatelessWidget {
-  const TransactionCard({
-    super.key,
-    required this.isPreviousSameDay,
-    required this.transactions,
-    required this.category,
-    required this.onClicked,
-    required this.isNextSameDay,
-    required this.transactionName,
-    required this.amountStr,
-    required this.weekDay,
-    required this.day,
-  });
-
-  final bool isPreviousSameDay;
-  final bool isNextSameDay;
-  final String weekDay;
-  final String day;
-  final String transactionName;
-  final String amountStr;
-  final List<Either<Expense, Income>> transactions;
-  final ExpenseCategory category;
-  final Function onClicked;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        onClicked();
-      },
-      child: SizedBox(
-        width: double.infinity,
-        height: 60,
-        child: Row(
-          children: [
-            Container(
-              width: 50,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: isPreviousSameDay
-                    ? Column(
-                        children: List.generate(
-                            150 ~/ 10,
-                            (index) => Expanded(
-                                  child: Container(
-                                    color: index % 2 == 0
-                                        ? Colors.transparent
-                                        : Colors.grey,
-                                    width: 2,
-                                  ),
-                                )),
-                      )
-                    : Column(
-                        mainAxisAlignment: isNextSameDay
-                            ? MainAxisAlignment.end
-                            : MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            weekDay,
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[800],
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            day,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const CircleAvatar(
-                            backgroundColor: Color(0xffb2e2ed),
-                            radius: 2,
-                          ),
-                        ],
-                      ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    right: 8, left: 8, top: isPreviousSameDay ? 2 : 8),
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                          padding: const EdgeInsets.all(12),
-                          width: 40,
-                          height: 40,
-                          alignment: Alignment.center,
-                          child: Center(
-                              child: Icon(
-                            category.iconData,
-                            color: Colors.white,
-                            size: 18,
-                          )),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            color: category.color,
-                          )),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          height: 40,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                category.name,
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                transactionName,
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Text(amountStr,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

@@ -31,7 +31,7 @@ class CustomScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-
+        resizeToAvoidBottomInset: false,
         drawer:  drawer,
         body: isScrolling
             ? SingleChildScrollView(

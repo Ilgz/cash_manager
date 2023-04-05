@@ -386,6 +386,7 @@ class _TransactionPageState extends State<TransactionPage>
                                                         Radius.circular(
                                                             20))),
                                                 isScrollControlled: true,
+
                                                 builder:
                                                     (BuildContext context) =>
                                                     IncomePage(

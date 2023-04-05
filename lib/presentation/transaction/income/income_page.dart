@@ -22,129 +22,131 @@ class IncomePage extends StatelessWidget {
       _nameController.text=income!.incomeName.getOrCrash();
       _amountController.text=income!.amount.getOrCrash().toString();
     }
-    return BlocProvider(
-      create: (context) => getIt<IncomeFormCubit>()..initialize(income),
-      child: Builder(
-          builder: (context) {
-            return BlocListener<IncomeFormCubit, IncomeFormState>(
-              listenWhen: (p,c)=>p.authFailureSuccessOption!=c.authFailureSuccessOption,
-              listener: (context, state) {
-                state.authFailureSuccessOption.fold( (){
-                }, (either) =>either.fold((f) => FailureSnackBar(failure: f), (_) {
-                  context.read<TransactionWatcherCubit>().getTransactionData();
-                  Navigator.pop(context);}));
-              },
-              child: Padding(
-                padding: EdgeInsets.only(top: 30, left: 30, right: 30),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IntrinsicHeight(
-                      child: Stack(children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Icon(Icons.close, size: 20),
+    return Padding(
+        padding: MediaQuery.of(context).viewInsets,      child: BlocProvider(
+        create: (context) => getIt<IncomeFormCubit>()..initialize(income),
+        child: Builder(
+            builder: (context) {
+              return BlocListener<IncomeFormCubit, IncomeFormState>(
+                listenWhen: (p,c)=>p.authFailureSuccessOption!=c.authFailureSuccessOption,
+                listener: (context, state) {
+                  state.authFailureSuccessOption.fold( (){
+                  }, (either) =>either.fold((f) => FailureSnackBar(failure: f), (_) {
+                    context.read<TransactionWatcherCubit>().getTransactionData();
+                    Navigator.pop(context);}));
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(top: 30, left: 30, right: 30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IntrinsicHeight(
+                        child: Stack(children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(Icons.close, size: 20),
+                            ),
                           ),
-                        ),
-                        Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              income==null?"Add new income":"Edit income",
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            )),
-                      ]),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    BlocBuilder<IncomeFormCubit, IncomeFormState>(
-                      builder: (context, state) {
-                        return TransactionName(
-                          state: right(state),
-                          controller: _nameController, onChanged: (value){
-                          context.read<IncomeFormCubit>().nameChanged(value);
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                income==null?"Add new income":"Edit income",
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              )),
+                        ]),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      BlocBuilder<IncomeFormCubit, IncomeFormState>(
+                        builder: (context, state) {
+                          return TransactionName(
+                            state: right(state),
+                            controller: _nameController, onChanged: (value){
+                            context.read<IncomeFormCubit>().nameChanged(value);
+                          },
+                          );
                         },
-                        );
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    BlocBuilder<IncomeFormCubit, IncomeFormState>(
-                      builder: (context, state) {
-                        return AmountWidget(
-                          state: right(state),
-                          controller: _amountController, onChanged: (String value) {
-                          context.read<IncomeFormCubit>().amountChanged(value);
+                      ),
+                      SizedBox(height: 20),
+                      BlocBuilder<IncomeFormCubit, IncomeFormState>(
+                        builder: (context, state) {
+                          return AmountWidget(
+                            state: right(state),
+                            controller: _amountController, onChanged: (String value) {
+                            context.read<IncomeFormCubit>().amountChanged(value);
+                          },
+                          );
                         },
-                        );
-                      },
-                    ),
-                    SizedBox(height: 4),
-                    Row(
-                      children: [
-                        templatePriceWidget(10,context),
-                        templatePriceWidget(50,context),
-                        templatePriceWidget(100,context),
-                        templatePriceWidget(500,context),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      children: [
-                        Visibility(
-                          visible: income!=null,
-                          child: Expanded(child: SizedBox(
-                              height: 40,
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red),
-                                  onPressed: () {
-                                    context.read<IncomeFormCubit>().deleteIncome(income!);
-                                  },
-                                  child: Text(
-                                    "Delete",
-                                    style: TextStyle(color: Colors.white, fontSize: 18),
-                                  )))),
-                        ),
-                        Visibility(                  visible: income!=null,
-                            child: SizedBox(width: 10,)),
-                        Expanded(
-                          child: SizedBox(
-                              height: 40,
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xff00b6e4)),
-                                  onPressed: () {
-                                    if(income==null){
-                                      context.read<IncomeFormCubit>().createIncome();
-                                    }else{
-                                      context.read<IncomeFormCubit>().updateIncome(income!);
-                                    }
-                                  },
-                                  child: Text(
-                                    income!=null?"Save":"Add",
-                                    style: TextStyle(color: Colors.white, fontSize: 18),
-                                  ))),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    )
-                  ],
+                      ),
+                      SizedBox(height: 4),
+                      Row(
+                        children: [
+                          templatePriceWidget(10,context),
+                          templatePriceWidget(50,context),
+                          templatePriceWidget(100,context),
+                          templatePriceWidget(500,context),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        children: [
+                          Visibility(
+                            visible: income!=null,
+                            child: Expanded(child: SizedBox(
+                                height: 40,
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red),
+                                    onPressed: () {
+                                      context.read<IncomeFormCubit>().deleteIncome(income!);
+                                    },
+                                    child: Text(
+                                      "Delete",
+                                      style: TextStyle(color: Colors.white, fontSize: 18),
+                                    )))),
+                          ),
+                          Visibility(                  visible: income!=null,
+                              child: SizedBox(width: 10,)),
+                          Expanded(
+                            child: SizedBox(
+                                height: 40,
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Color(0xff00b6e4)),
+                                    onPressed: () {
+                                      if(income==null){
+                                        context.read<IncomeFormCubit>().createIncome();
+                                      }else{
+                                        context.read<IncomeFormCubit>().updateIncome(income!);
+                                      }
+                                    },
+                                    child: Text(
+                                      income!=null?"Save":"Add",
+                                      style: TextStyle(color: Colors.white, fontSize: 18),
+                                    ))),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
+              );
+            }
+        ),
       ),
     );
   }

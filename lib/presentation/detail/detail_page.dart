@@ -3,6 +3,7 @@ import 'package:cash_manager/domain/transaction/category.dart';
 import 'package:cash_manager/domain/transaction/expense.dart';
 import 'package:cash_manager/domain/transaction/income.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_scaffold.dart';
+import 'package:cash_manager/presentation/detail/widgets/category_expense_stat.dart';
 import 'package:cash_manager/presentation/detail/widgets/flow_card.dart';
 import 'package:cash_manager/presentation/detail/widgets/horizontal_expense_chart.dart';
 import 'package:dartz/dartz.dart' hide State;
@@ -197,11 +198,25 @@ class DetailPage extends StatelessWidget {
                             }
                             final top4Categories =
                                 getTop4Categories(expenseList);
-                            return HorizontalExpenseChart(
-                                values: top4Categories.values.toList(),
-                                colors: top4Categories.keys
-                                    .map((category) => category.color)
-                                    .toList());
+                            return Column(
+                              children: [
+                                // HorizontalExpenseChart(
+                                //     values: top4Categories.values.toList(),
+                                //     colors: top4Categories.keys
+                                //         .map((category) => category.color)
+                                //         .toList()),
+                                SizedBox(height: 10,),
+
+                                Row(children: [
+                                  CategoryExpenseStat(index:0,length:top4Categories.length,top4Categories: top4Categories),
+                                  CategoryExpenseStat(index:1,length:top4Categories.length,top4Categories: top4Categories)
+                                ],),
+                                Row(children: [
+                                  CategoryExpenseStat(index:2,length:top4Categories.length,top4Categories: top4Categories),
+                                  CategoryExpenseStat(index:3,length:top4Categories.length,top4Categories: top4Categories)
+                                ],),
+                              ],
+                            );
                           },
                           orElse: () => SizedBox());
                     },

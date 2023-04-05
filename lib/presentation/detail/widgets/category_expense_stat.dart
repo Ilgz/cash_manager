@@ -1,6 +1,6 @@
 import 'package:cash_manager/domain/transaction/category.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 class CategoryExpenseStat extends StatelessWidget {
   const CategoryExpenseStat({Key? key, required this.index, required this.length, required this.top4Categories}) : super(key: key);
   final int index;
@@ -8,8 +8,24 @@ class CategoryExpenseStat extends StatelessWidget {
   final Map<ExpenseCategory, int> top4Categories;
   @override
   Widget build(BuildContext context) {
+
     return Expanded(
-      child: length<index+1?SizedBox():SizedBox(
+      child: length<index+1?SizedBox():(){
+        late String formattedBalance;
+        final int balance=top4Categories.values.toList()[index];
+        if (balance.toString().length == 4) {
+          formattedBalance =
+              NumberFormat('#,###')
+                  .format(balance);
+        }
+        else if (balance.toString().length == 5) {
+          formattedBalance =
+              NumberFormat('##,###')
+                  .format(balance);
+        } else {
+          formattedBalance = balance.toString() ;
+        }
+        return SizedBox(
         width: double.infinity,
         child: Row(
           children: [
@@ -45,12 +61,13 @@ class CategoryExpenseStat extends StatelessWidget {
                     Text(
                     top4Categories.keys.toList()[index].name,
                       style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500),
+                          color: Colors.grey[500]
+                          ,
+                          fontWeight: FontWeight.w600),
                     ),
-                    Text(                      top4Categories.values.toList()[index].toString(),
-
+                    Text(                   "\$$formattedBalance",
                         style: TextStyle(
+                          fontSize: 16,
                             color: Colors.black,
                             fontWeight: FontWeight.bold)),
                   ],
@@ -59,7 +76,8 @@ class CategoryExpenseStat extends StatelessWidget {
             ),
           ],
         ),
-      ),
+      );}
+        ()
     );
   }
 }

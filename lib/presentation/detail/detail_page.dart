@@ -212,6 +212,7 @@ class DetailPage extends StatelessWidget {
                                   CategoryExpenseStat(index:0,length:top4Categories.length,top4Categories: top4Categories),
                                   CategoryExpenseStat(index:1,length:top4Categories.length,top4Categories: top4Categories)
                                 ],),
+                                SizedBox(height: 10),
                                 Row(children: [
                                   CategoryExpenseStat(index:2,length:top4Categories.length,top4Categories: top4Categories),
                                   CategoryExpenseStat(index:3,length:top4Categories.length,top4Categories: top4Categories)

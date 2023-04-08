@@ -1,19 +1,17 @@
 import 'package:cash_manager/application/transaction/transaction_filter/transaction_filter_cubit.dart';
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
 import 'package:cash_manager/domain/core/transaction.dart';
-import 'package:cash_manager/domain/transaction/category.dart';
 import 'package:cash_manager/domain/transaction/expense/expense.dart';
+import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/presentation/core/constants.dart';
-import 'package:cash_manager/presentation/core/utils/bottom_sheet_helpers.dart';
 import 'package:cash_manager/presentation/core/widgets/critical_failure_card.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_progress_indicator.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_scaffold.dart';
-import 'package:cash_manager/presentation/transaction/expense/expense_page.dart';
-import 'package:cash_manager/presentation/transaction/income/income_page.dart';
 import 'package:cash_manager/presentation/transaction/widgets/custom_fab.dart';
 import 'package:cash_manager/presentation/transaction/widgets/income_expense_chart.dart';
 import 'package:cash_manager/presentation/transaction/widgets/top_bar.dart';
 import 'package:cash_manager/presentation/transaction/widgets/transaction_card.dart';
+import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -106,7 +104,8 @@ class _TransactionPageState extends State<TransactionPage>
                         loadSuccess: (successState) {
                           context
                               .read<TransactionFilterCubit>()
-                              .updateTransactionList(successState.transactionData);
+                              .updateTransactionList(
+                                  successState.transactionData);
                           return BlocBuilder<TransactionFilterCubit,
                               TransactionFilterState>(
                             builder: (context, state) {
@@ -116,67 +115,19 @@ class _TransactionPageState extends State<TransactionPage>
                                     shrinkWrap: true,
                                     itemCount: transactions.length,
                                     itemBuilder: (context, index) {
-                                      final transaction = transactions[index];
-                                      return transaction.fold((expense) {
-                                        final isPreviousSameDay = (index != 0 &&
-                                            expense.date.day ==
-                                                transactions[index - 1].fold(
-                                                        (expense) =>
-                                                    expense.date.day,
-                                                        (income) =>
-                                                    income.date.day));
-                                        final isNextSameDay = (index !=
-                                                transactions.length - 1 &&
-                                            expense.date.day ==
-                                                transactions[index + 1].fold(
-                                                    (expense) =>
-                                                        expense.date.day,
-                                                    (income) =>
-                                                        income.date.day));
-                                        return TransactionCard(
+                                      final transactions =
+                                          convertEitherToTransactionList(
+                                              state.transactions);
+                                      final isPreviousSameDay =
+                                          isSameDayAsPrevious(
+                                              index, transactions);
+                                      final isNextSameDay = isSameDayAsPrevious(
+                                          index, transactions);
+                                      return TransactionCard(
                                           isPreviousSameDay: isPreviousSameDay,
+                                          onClicked: () {},
                                           isNextSameDay: isNextSameDay,
-                                          onClicked: () {
-                                            showCustomModalBottomSheet(
-                                                context,
-                                                ExpensePage(
-                                                  expense: expense,
-                                                ));
-                                          },
-                                          transaction: Transaction.fromExpense(expense),
-                                        );
-                                      }, (income) {
-                                        final isPreviousSameDay = (index != 0 &&
-                                            income.date.day ==
-                                                transactions[index - 1].fold(
-                                                    (expense) =>
-                                                        expense.date.day,
-                                                    (income) =>
-                                                        income.date.day));
-                                        final isNextSameDay = (index !=
-                                                transactions.length - 1 &&
-                                            income.date.day ==
-                                                transactions[index + 1].fold(
-                                                    (expense) =>
-                                                        expense.date.day,
-                                                    (income) =>
-                                                        income.date.day));
-                                        return TransactionCard(
-
-                                          isPreviousSameDay: isPreviousSameDay,
-                                          isNextSameDay: isNextSameDay,
-
-                                          onClicked: () {
-                                            showCustomModalBottomSheet(
-                                                context,
-                                                IncomePage(
-                                                  income: income,
-                                                ));
-                                          },
-                                          transaction: Transaction.fromIncome(income),
-
-                                        );
-                                      });
+                                          transaction: transactions[index]);
                                     });
                               } else {
                                 return Container(
@@ -197,5 +148,34 @@ class _TransactionPageState extends State<TransactionPage>
             )
           ],
         ));
+  }
+
+  List<Transaction> convertEitherToTransactionList(
+      List<Either<Expense, Income>> incomesOrExpenses) {
+    List<Transaction> transactionList = [];
+    for (var incomeOrExpense in incomesOrExpenses) {
+      transactionList.add(incomeOrExpense.fold(
+          (expense) => Transaction.fromExpense(expense),
+          (income) => Transaction.fromIncome(income)));
+    }
+    return transactionList;
+  }
+
+  bool isSameDayAsPrevious(int index, List<Transaction> transactionList) {
+    if (index == 0) {
+      return false;
+    }
+    final previousTransaction = transactionList[index - 1];
+    final currentTransaction = transactionList[index];
+    return previousTransaction.date.day == currentTransaction.date.day;
+  }
+  bool isSameDayAsNext(int index, List<Transaction> transactionList) {
+    if (index == transactionList.length - 1) {
+      return false;
+    } else {
+      final nextTransaction = transactionList[index + 1];
+      final currentTransaction = transactionList[index];
+      return nextTransaction.date.day == currentTransaction.date.day;
+    }
   }
 }

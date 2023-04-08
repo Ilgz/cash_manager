@@ -1,31 +1,21 @@
+import 'package:cash_manager/domain/core/transaction.dart';
 import 'package:cash_manager/domain/transaction/category.dart';
-import 'package:cash_manager/domain/transaction/expense.dart';
-import 'package:cash_manager/domain/transaction/income.dart';
-import 'package:dartz/dartz.dart';
+import 'package:cash_manager/presentation/core/utils/amount_utils.dart';
+import 'package:cash_manager/presentation/core/utils/datetime_utils.dart';
 import 'package:flutter/material.dart';
 
 class TransactionCard extends StatelessWidget {
   const TransactionCard({
     super.key,
     required this.isPreviousSameDay,
-    required this.transactions,
-    required this.category,
     required this.onClicked,
     required this.isNextSameDay,
-    required this.transactionName,
-    required this.amountStr,
-    required this.weekDay,
-    required this.day,
+    required this.transaction
   });
 
   final bool isPreviousSameDay;
   final bool isNextSameDay;
-  final String weekDay;
-  final String day;
-  final String transactionName;
-  final String amountStr;
-  final List<Either<Expense, Income>> transactions;
-  final ExpenseCategory category;
+  final Transaction transaction;
   final Function onClicked;
 
   @override
@@ -45,41 +35,41 @@ class TransactionCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: isPreviousSameDay
                     ? Column(
-                  children: List.generate(
-                      150 ~/ 10,
-                          (index) => Expanded(
-                        child: Container(
-                          color: index % 2 == 0
-                              ? Colors.transparent
-                              : Colors.grey,
-                          width: 2,
-                        ),
-                      )),
-                )
+                        children: List.generate(
+                            150 ~/ 10,
+                            (index) => Expanded(
+                                  child: Container(
+                                    color: index % 2 == 0
+                                        ? Colors.transparent
+                                        : Colors.grey,
+                                    width: 2,
+                                  ),
+                                )),
+                      )
                     : Column(
-                  mainAxisAlignment: isNextSameDay
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      weekDay,
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[800],
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      day,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const CircleAvatar(
-                      backgroundColor: Color(0xffb2e2ed),
-                      radius: 2,
-                    ),
-                  ],
-                ),
+                        mainAxisAlignment: isNextSameDay
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            getWeekday(transaction.date),
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            getDay(transaction.date),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const CircleAvatar(
+                            backgroundColor: Color(0xffb2e2ed),
+                            radius: 2,
+                          ),
+                        ],
+                      ),
               ),
             ),
             Expanded(
@@ -105,13 +95,13 @@ class TransactionCard extends StatelessWidget {
                           alignment: Alignment.center,
                           child: Center(
                               child: Icon(
-                                category.iconData,
-                                color: Colors.white,
-                                size: 18,
-                              )),
+                            transaction.category.iconData,
+                            color: Colors.white,
+                            size: 18,
+                          )),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
-                            color: category.color,
+                            color: transaction.category.color,
                           )),
                       const SizedBox(
                         width: 10,
@@ -124,13 +114,13 @@ class TransactionCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                category.name,
+                                transaction.category.name,
                                 style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
-                                transactionName,
+                                transaction.name.getOrCrash(),
                                 style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
@@ -140,7 +130,7 @@ class TransactionCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(amountStr,
+                      Text(getAmountWithTransactionSignifier(transaction),
                           style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),

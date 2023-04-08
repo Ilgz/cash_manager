@@ -1,10 +1,10 @@
 import 'package:cash_manager/application/expense/expense_form/expense_form_cubit.dart';
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
-import 'package:cash_manager/domain/transaction/expense.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
 import 'package:cash_manager/injection.dart';
 import 'package:cash_manager/presentation/core/widgets/failure_snackbar.dart';
-import 'package:cash_manager/presentation/transaction/widgets/transaction_amount.dart';
-import 'package:cash_manager/presentation/transaction/widgets/transaction_name.dart';
+import 'package:cash_manager/presentation/transaction/widgets/amount_text_field.dart';
+import 'package:cash_manager/presentation/transaction/widgets/name_text_field.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +17,7 @@ class ExpensePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(expense!=null){
-      _nameController.text=expense!.expenseName.getOrCrash();
+      _nameController.text=expense!.name.getOrCrash();
       _amountController.text=expense!.amount.getOrCrash().toString();
     }
     return Padding(
@@ -65,7 +65,7 @@ class ExpensePage extends StatelessWidget {
                   ),
                   BlocBuilder<ExpenseFormCubit, ExpenseFormState>(
                     builder: (context, state) {
-                      return TransactionName(
+                      return TransactionTextField(
                         state: left(state),
                         controller: _nameController, onChanged: (value){
                         context.read<ExpenseFormCubit>().nameChanged(value);
@@ -76,7 +76,7 @@ class ExpensePage extends StatelessWidget {
                   SizedBox(height: 20),
                   BlocBuilder<ExpenseFormCubit, ExpenseFormState>(
                     builder: (context, state) {
-                      return AmountWidget(
+                      return AmountTextField(
                         state: left(state),
                         controller: _amountController, onChanged: (String value) {
                         context.read<ExpenseFormCubit>().amountChanged(value);

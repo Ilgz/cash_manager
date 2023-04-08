@@ -4,8 +4,8 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AmountWidget extends StatelessWidget {
-  const AmountWidget({
+class AmountTextField extends StatelessWidget {
+  const AmountTextField({
     super.key,
     required this.state,
     required this.controller, required this.onChanged,

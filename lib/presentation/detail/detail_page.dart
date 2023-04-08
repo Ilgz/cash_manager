@@ -1,7 +1,7 @@
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
 import 'package:cash_manager/domain/transaction/category.dart';
-import 'package:cash_manager/domain/transaction/expense.dart';
-import 'package:cash_manager/domain/transaction/income.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
+import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_scaffold.dart';
 import 'package:cash_manager/presentation/detail/widgets/category_expense_stat.dart';
 import 'package:cash_manager/presentation/detail/widgets/flow_card.dart';
@@ -229,7 +229,7 @@ class DetailPage extends StatelessWidget {
       ],
     ));
   }
-  Map<ExpenseCategory, int> getTop4Categories(List<Expense> expenses) {
+  Map<Category, int> getTop4Categories(List<Expense> expenses) {
     Map<int, int> categoryTotals = {};
 
     // Calculate the total amount for each category
@@ -248,11 +248,11 @@ class DetailPage extends StatelessWidget {
       ..sort((a, b) => b.value - a.value);
 
     // Take the top 4 categories
-    Map<ExpenseCategory, int> top4Categories = {};
+    Map<Category, int> top4Categories = {};
     for (int i = 0; i < sortedCategories.length && i < 4; i++) {
       int category = sortedCategories[i].key;
       int totalAmount = sortedCategories[i].value;
-      ExpenseCategory categoryName = Expense.categories[category];
+      Category categoryName = Expense.categories[category];
       top4Categories[categoryName] = totalAmount;
     }
 

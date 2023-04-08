@@ -3,8 +3,8 @@ import 'package:cash_manager/application/income/income_form/income_form_cubit.da
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-class TransactionName extends StatelessWidget {
-  const TransactionName({
+class TransactionTextField extends StatelessWidget {
+  const TransactionTextField({
     super.key,
     required this.state, required this.controller, required this.onChanged,
   });
@@ -18,9 +18,9 @@ class TransactionName extends StatelessWidget {
       children: [
         Text(
           (!state.fold((expenseState) => expenseState.showErrorMessages, (incomeState) => incomeState.showErrorMessages) ||
-              state.fold((expenseState) => expenseState.expense.expenseName.value.isRight(), (incomeState) => incomeState.income.incomeName.value.isRight()))
+              state.fold((expenseState) => expenseState.expense.name.value.isRight(), (incomeState) => incomeState.income.name.value.isRight()))
               ? state.fold((expenseState) => "Expense Name", (incomeState) => "Income Name")
-              : state.fold((expenseState) => expenseState.expense.expenseName.value, (incomeState) => incomeState.income.incomeName.value).fold(
+              : state.fold((expenseState) => expenseState.expense.name.value, (incomeState) => incomeState.income.name.value).fold(
                   (f) => f.maybeMap(
                   empty: (_) => 'Empty value',
                   exceedingLength: (_) => 'Exceeding length 50 symbols',
@@ -29,7 +29,7 @@ class TransactionName extends StatelessWidget {
           style: TextStyle(
               fontSize: 12,
               color: (!state.fold((expenseState) => expenseState.showErrorMessages, (incomeState) => incomeState.showErrorMessages) ||
-                  state.fold((expenseState) => expenseState.expense.expenseName, (incomeState) => incomeState.income.incomeName).value.isRight())
+                  state.fold((expenseState) => expenseState.expense.name, (incomeState) => incomeState.income.name).value.isRight())
                   ? Colors.grey[800]
                   : Colors.red),
         ),
@@ -40,7 +40,7 @@ class TransactionName extends StatelessWidget {
               color: Colors.grey[200],
               border: Border.all(
                   color: (!state.fold((expenseState) => expenseState.showErrorMessages, (incomeState) => incomeState.showErrorMessages) ||
-                      state.fold((expenseState) => expenseState.expense.expenseName, (incomeState) => incomeState.income.incomeName).value.isRight())
+                      state.fold((expenseState) => expenseState.expense.name, (incomeState) => incomeState.income.name).value.isRight())
                       ? Colors.grey[500]!
                       : Colors.red),
               borderRadius: BorderRadius.circular(8)),

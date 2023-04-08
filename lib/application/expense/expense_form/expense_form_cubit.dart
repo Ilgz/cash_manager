@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:cash_manager/domain/transaction/expense.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
 import 'package:cash_manager/domain/transaction/i_transaction_repository.dart';
 import 'package:cash_manager/domain/transaction/transaction_failure.dart';
 import 'package:cash_manager/domain/transaction/value_objects.dart';
@@ -27,7 +27,7 @@ class ExpenseFormCubit extends Cubit<ExpenseFormState> {
 
   void nameChanged(String expenseName) {
     emit(state.copyWith(
-        expense: state.expense.copyWith(expenseName: ExpenseName(expenseName)),
+        expense: state.expense.copyWith(name: TransactionName(expenseName)),
         authFailureSuccessOption: none()));
   }
 

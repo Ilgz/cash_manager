@@ -1,5 +1,5 @@
-import 'package:cash_manager/domain/transaction/expense.dart';
-import 'package:cash_manager/domain/transaction/income.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
+import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/domain/transaction/transaction_failure.dart';
 import 'package:dartz/dartz.dart';
 abstract class ITransactionRepository{

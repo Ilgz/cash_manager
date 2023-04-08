@@ -1,5 +1,5 @@
-import 'package:cash_manager/domain/transaction/expense.dart';
-import 'package:cash_manager/domain/transaction/income.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
+import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/domain/transaction/value_objects.dart';
 import 'package:cash_manager/infrastructure/transaction/expense_dto.dart';
 import 'package:cash_manager/infrastructure/transaction/income_dto.dart';
@@ -27,10 +27,10 @@ void main() async {
     incomeBox = await Hive.openBox("income");
     transactionRepository = TransactionRepository(expenseBox, incomeBox);
     expense = Expense.empty().copyWith(
-        expenseName: ExpenseName(getRandomName()),
+        name: TransactionName(getRandomName()),
         amount: Amount(getRandomDouble()));
     income = Income.empty().copyWith(
-        incomeName: IncomeName(getRandomName()),
+        name: TransactionName(getRandomName()),
         amount: Amount(getRandomDouble()));
     await transactionRepository.createExpense(expense);
     await transactionRepository.createIncome(income);
@@ -55,7 +55,7 @@ void main() async {
       () async {
         final value = await transactionRepository.createExpense(Expense.empty()
             .copyWith(
-                expenseName: ExpenseName(getRandomName()),
+            name: TransactionName(getRandomName()),
                 amount: Amount(getRandomDouble())));
         expect(value.isRight(), true);
       },
@@ -68,7 +68,7 @@ void main() async {
         final value = await transactionRepository.updateExpense(
             expense,
             Expense.empty().copyWith(
-                expenseName: ExpenseName(getRandomName()),
+                name: TransactionName(getRandomName()),
                 amount: Amount(getRandomDouble())));
         expect(value.isRight(), true);
       },
@@ -103,7 +103,7 @@ void main() async {
       () async {
         final value = await transactionRepository.createIncome(Income.empty()
             .copyWith(
-                incomeName: IncomeName(getRandomName()),
+            name: TransactionName(getRandomName()),
                 amount: Amount(getRandomDouble())));
         expect(value.isRight(), true);
       },
@@ -116,7 +116,7 @@ void main() async {
         final value = await transactionRepository.updateIncome(
             income,
             Income.empty().copyWith(
-                incomeName: IncomeName(getRandomName()),
+                name: TransactionName(getRandomName()),
                 amount: Amount(getRandomDouble())));
         expect(value.isRight(), true);
       },

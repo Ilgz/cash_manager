@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:cash_manager/domain/transaction/expense.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
 import 'package:cash_manager/domain/transaction/i_transaction_repository.dart';
-import 'package:cash_manager/domain/transaction/income.dart';
+import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/domain/transaction/transaction_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -17,7 +17,6 @@ class TransactionWatcherCubit extends Cubit<TransactionWatcherState> {
 
   TransactionWatcherCubit(this._transactionRepository)
       : super(const TransactionWatcherState.initial());
-
   void getTransactionData() async {
     emit(const TransactionWatcherState.loadInProgress());
     final expenseList = await _transactionRepository.getExpenses();

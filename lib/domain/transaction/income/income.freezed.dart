@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Income {
-  IncomeName get incomeName => throw _privateConstructorUsedError;
+  TransactionName get name => throw _privateConstructorUsedError;
   Amount get amount => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
 
@@ -29,7 +29,7 @@ abstract class $IncomeCopyWith<$Res> {
   factory $IncomeCopyWith(Income value, $Res Function(Income) then) =
       _$IncomeCopyWithImpl<$Res, Income>;
   @useResult
-  $Res call({IncomeName incomeName, Amount amount, DateTime date});
+  $Res call({TransactionName name, Amount amount, DateTime date});
 }
 
 /// @nodoc
@@ -45,15 +45,15 @@ class _$IncomeCopyWithImpl<$Res, $Val extends Income>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? incomeName = null,
+    Object? name = null,
     Object? amount = null,
     Object? date = null,
   }) {
     return _then(_value.copyWith(
-      incomeName: null == incomeName
-          ? _value.incomeName
-          : incomeName // ignore: cast_nullable_to_non_nullable
-              as IncomeName,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as TransactionName,
       amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -72,7 +72,7 @@ abstract class _$$_IncomeCopyWith<$Res> implements $IncomeCopyWith<$Res> {
       __$$_IncomeCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({IncomeName incomeName, Amount amount, DateTime date});
+  $Res call({TransactionName name, Amount amount, DateTime date});
 }
 
 /// @nodoc
@@ -85,15 +85,15 @@ class __$$_IncomeCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? incomeName = null,
+    Object? name = null,
     Object? amount = null,
     Object? date = null,
   }) {
     return _then(_$_Income(
-      incomeName: null == incomeName
-          ? _value.incomeName
-          : incomeName // ignore: cast_nullable_to_non_nullable
-              as IncomeName,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as TransactionName,
       amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -109,12 +109,11 @@ class __$$_IncomeCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Income extends _Income {
-  _$_Income(
-      {required this.incomeName, required this.amount, required this.date})
+  _$_Income({required this.name, required this.amount, required this.date})
       : super._();
 
   @override
-  final IncomeName incomeName;
+  final TransactionName name;
   @override
   final Amount amount;
   @override
@@ -122,7 +121,7 @@ class _$_Income extends _Income {
 
   @override
   String toString() {
-    return 'Income(incomeName: $incomeName, amount: $amount, date: $date)';
+    return 'Income(name: $name, amount: $amount, date: $date)';
   }
 
   @override
@@ -130,14 +129,13 @@ class _$_Income extends _Income {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Income &&
-            (identical(other.incomeName, incomeName) ||
-                other.incomeName == incomeName) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.date, date) || other.date == date));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, incomeName, amount, date);
+  int get hashCode => Object.hash(runtimeType, name, amount, date);
 
   @JsonKey(ignore: true)
   @override
@@ -148,13 +146,13 @@ class _$_Income extends _Income {
 
 abstract class _Income extends Income {
   factory _Income(
-      {required final IncomeName incomeName,
+      {required final TransactionName name,
       required final Amount amount,
       required final DateTime date}) = _$_Income;
   _Income._() : super._();
 
   @override
-  IncomeName get incomeName;
+  TransactionName get name;
   @override
   Amount get amount;
   @override

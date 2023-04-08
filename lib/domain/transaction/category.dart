@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
-class ExpenseCategory{
+class Category{
   final String name;
   final IconData iconData;
   final Color color;
-  ExpenseCategory(this.name, this.iconData, this.color);
-
+  const Category(this.name, this.iconData, this.color);
 }

@@ -1,5 +1,5 @@
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
-import 'package:cash_manager/domain/transaction/expense.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,7 +24,7 @@ class IncomeExpenseChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(elevation: 12, child: Column(children: [
-      SizedBox(height: 16,),
+      const SizedBox(height: 16,),
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -48,13 +48,12 @@ class IncomeExpenseChart extends StatelessWidget {
           ]
         ],
       ),
-
-      SizedBox(height: 16,),
+      const SizedBox(height: 16,),
       SizedBox(height: 30,
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           ...chartMonths.map((value) => SizedBox(width: 22,
             child: Align(alignment: Alignment.topCenter,
-                child: Text(value, style: TextStyle(fontSize: 10, color: Colors
+                child: Text(value, style: const TextStyle(fontSize: 10, color: Colors
                     .grey),)),)),
         ],),)
     ],),);
@@ -106,13 +105,13 @@ class Candle extends StatelessWidget {
             width: 6,
             height: height,
             decoration: BoxDecoration(
-                color: isIncome ?   Color(0xff08b1e2):Color(0xff01359a),
+                color: isIncome ?   const Color(0xff08b1e2):const Color(0xff01359a),
                 borderRadius: !isIncome
-                    ? BorderRadius.only(
+                    ? const BorderRadius.only(
                     topLeft: Radius.circular(10), topRight: Radius.circular(10))
-                    : BorderRadius.only(bottomLeft: Radius.circular(10),
+                    : const BorderRadius.only(bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10))),);
-        }, orElse: () => SizedBox());
+        }, orElse: () => const SizedBox());
       },
     );
   }

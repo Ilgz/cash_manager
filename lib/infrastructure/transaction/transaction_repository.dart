@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:cash_manager/domain/transaction/expense.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
 import 'package:cash_manager/domain/transaction/i_transaction_repository.dart';
-import 'package:cash_manager/domain/transaction/income.dart';
+import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/domain/transaction/transaction_failure.dart';
 import 'package:cash_manager/infrastructure/transaction/expense_dto.dart';
 import 'package:cash_manager/infrastructure/transaction/income_dto.dart';

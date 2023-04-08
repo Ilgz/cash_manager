@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Expense {
-  ExpenseName get expenseName => throw _privateConstructorUsedError;
+  TransactionName get name => throw _privateConstructorUsedError;
   int get category => throw _privateConstructorUsedError;
   Amount get amount => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
@@ -30,8 +30,7 @@ abstract class $ExpenseCopyWith<$Res> {
   factory $ExpenseCopyWith(Expense value, $Res Function(Expense) then) =
       _$ExpenseCopyWithImpl<$Res, Expense>;
   @useResult
-  $Res call(
-      {ExpenseName expenseName, int category, Amount amount, DateTime date});
+  $Res call({TransactionName name, int category, Amount amount, DateTime date});
 }
 
 /// @nodoc
@@ -47,16 +46,16 @@ class _$ExpenseCopyWithImpl<$Res, $Val extends Expense>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? expenseName = null,
+    Object? name = null,
     Object? category = null,
     Object? amount = null,
     Object? date = null,
   }) {
     return _then(_value.copyWith(
-      expenseName: null == expenseName
-          ? _value.expenseName
-          : expenseName // ignore: cast_nullable_to_non_nullable
-              as ExpenseName,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as TransactionName,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -80,8 +79,7 @@ abstract class _$$_ExpenseCopyWith<$Res> implements $ExpenseCopyWith<$Res> {
       __$$_ExpenseCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {ExpenseName expenseName, int category, Amount amount, DateTime date});
+  $Res call({TransactionName name, int category, Amount amount, DateTime date});
 }
 
 /// @nodoc
@@ -94,16 +92,16 @@ class __$$_ExpenseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? expenseName = null,
+    Object? name = null,
     Object? category = null,
     Object? amount = null,
     Object? date = null,
   }) {
     return _then(_$_Expense(
-      expenseName: null == expenseName
-          ? _value.expenseName
-          : expenseName // ignore: cast_nullable_to_non_nullable
-              as ExpenseName,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as TransactionName,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -124,14 +122,14 @@ class __$$_ExpenseCopyWithImpl<$Res>
 
 class _$_Expense extends _Expense {
   _$_Expense(
-      {required this.expenseName,
+      {required this.name,
       required this.category,
       required this.amount,
       required this.date})
       : super._();
 
   @override
-  final ExpenseName expenseName;
+  final TransactionName name;
   @override
   final int category;
   @override
@@ -141,7 +139,7 @@ class _$_Expense extends _Expense {
 
   @override
   String toString() {
-    return 'Expense(expenseName: $expenseName, category: $category, amount: $amount, date: $date)';
+    return 'Expense(name: $name, category: $category, amount: $amount, date: $date)';
   }
 
   @override
@@ -149,8 +147,7 @@ class _$_Expense extends _Expense {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Expense &&
-            (identical(other.expenseName, expenseName) ||
-                other.expenseName == expenseName) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.amount, amount) || other.amount == amount) &&
@@ -158,8 +155,7 @@ class _$_Expense extends _Expense {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, expenseName, category, amount, date);
+  int get hashCode => Object.hash(runtimeType, name, category, amount, date);
 
   @JsonKey(ignore: true)
   @override
@@ -170,14 +166,14 @@ class _$_Expense extends _Expense {
 
 abstract class _Expense extends Expense {
   factory _Expense(
-      {required final ExpenseName expenseName,
+      {required final TransactionName name,
       required final int category,
       required final Amount amount,
       required final DateTime date}) = _$_Expense;
   _Expense._() : super._();
 
   @override
-  ExpenseName get expenseName;
+  TransactionName get name;
   @override
   int get category;
   @override

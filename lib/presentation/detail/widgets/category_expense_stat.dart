@@ -5,7 +5,7 @@ class CategoryExpenseStat extends StatelessWidget {
   const CategoryExpenseStat({Key? key, required this.index, required this.length, required this.top4Categories}) : super(key: key);
   final int index;
   final int length;
-  final Map<ExpenseCategory, int> top4Categories;
+  final Map<Category, int> top4Categories;
   @override
   Widget build(BuildContext context) {
 

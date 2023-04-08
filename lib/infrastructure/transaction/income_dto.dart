@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:cash_manager/domain/transaction/expense.dart';
-import 'package:cash_manager/domain/transaction/income.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
+import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/domain/transaction/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,9 +21,9 @@ abstract class IncomeDto implements _$IncomeDto {
   }) = _IncomeDto;
 
   factory IncomeDto.fromDomain(Income income) =>
-      IncomeDto(incomeName:income.incomeName.getOrCrash(),
+      IncomeDto(incomeName:income.name.getOrCrash(),
           amount:income.amount.getOrCrash(), date: income.date);
   Income toDomain() {
-    return Income(incomeName: IncomeName(incomeName),amount: Amount(amount),date: date);
+    return Income(name: TransactionName(incomeName),amount: Amount(amount),date: date);
   }
 }

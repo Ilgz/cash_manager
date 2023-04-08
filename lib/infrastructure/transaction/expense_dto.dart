@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:cash_manager/domain/transaction/expense.dart';
+import 'package:cash_manager/domain/transaction/expense/expense.dart';
 import 'package:cash_manager/domain/transaction/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -22,9 +22,9 @@ abstract class ExpenseDto implements _$ExpenseDto {
   }) = _ExpenseDto;
 
   factory ExpenseDto.fromDomain(Expense expense) =>
-      ExpenseDto(expenseName:expense.expenseName.getOrCrash(),
+      ExpenseDto(expenseName:expense.name.getOrCrash(),
           category:expense.category,amount:expense.amount.getOrCrash(), date: expense.date);
   Expense toDomain() {
-    return Expense(expenseName: ExpenseName(expenseName),category: category,amount: Amount(amount),date: date);
+    return Expense(name: TransactionName(expenseName),category: category,amount: Amount(amount),date: date);
   }
 }

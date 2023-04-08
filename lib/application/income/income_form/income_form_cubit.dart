@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cash_manager/domain/transaction/i_transaction_repository.dart';
-import 'package:cash_manager/domain/transaction/income.dart';
+import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/domain/transaction/transaction_failure.dart';
 import 'package:cash_manager/domain/transaction/value_objects.dart';
 import 'package:dartz/dartz.dart';
@@ -24,7 +24,7 @@ class IncomeFormCubit extends Cubit<IncomeFormState> {
 
   void nameChanged(String incomeName) {
     emit(state.copyWith(
-        income: state.income.copyWith(incomeName: IncomeName(incomeName)),
+        income: state.income.copyWith(name: TransactionName(incomeName)),
         authFailureSuccessOption: none()));
   }
   createIncome() async {

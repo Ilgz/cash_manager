@@ -4,9 +4,12 @@ import 'package:cash_manager/domain/core/transaction.dart';
 import 'package:cash_manager/domain/transaction/expense/expense.dart';
 import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/presentation/core/constants.dart';
+import 'package:cash_manager/presentation/core/utils/bottom_sheet_helpers.dart';
 import 'package:cash_manager/presentation/core/widgets/critical_failure_card.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_progress_indicator.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_scaffold.dart';
+import 'package:cash_manager/presentation/transaction/expense/expense_page.dart';
+import 'package:cash_manager/presentation/transaction/income/income_page.dart';
 import 'package:cash_manager/presentation/transaction/widgets/custom_fab.dart';
 import 'package:cash_manager/presentation/transaction/widgets/income_expense_chart.dart';
 import 'package:cash_manager/presentation/transaction/widgets/top_bar.dart';
@@ -47,7 +50,7 @@ class _TransactionPageState extends State<TransactionPage>
             SizedBox(
               height: 360,
               child: Stack(
-                clipBehavior: Clip.antiAlias  ,
+                clipBehavior: Clip.antiAlias,
                 children: [
                   Positioned(
                       top: 0,
@@ -59,39 +62,40 @@ class _TransactionPageState extends State<TransactionPage>
                         color: const Color(0xff0039a5),
                         child: TopBar(),
                       )),
-                   const Positioned(
-                    top: 160,
+                  const Positioned(
+                      top: 160,
                       right: 0,
                       left: 0,
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: SizedBox(height:200,child: IncomeExpenseChart()),
+                        child:
+                            SizedBox(height: 200, child: IncomeExpenseChart()),
                       )),
                 ],
               ),
             ),
-              SizedBox(
-                  height: 50,
-                  child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: TabBar(
-                          indicatorColor: const Color(0xff86c1d2),
-                          labelStyle: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                          unselectedLabelStyle:
-                              const TextStyle(color: Colors.grey),
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          indicatorWeight: 3.0,
-                          onTap: (index) {
-                            // Change month
-                            context
-                                .read<TransactionFilterCubit>()
-                                .monthIndexChanged(index + 1,
-                                    context.read<TransactionWatcherCubit>());
-                          },
-                          isScrollable: true,
-                          controller: _tabController,
-                          tabs: tabs))),
+            SizedBox(
+                height: 50,
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: TabBar(
+                        indicatorColor: const Color(0xff86c1d2),
+                        labelStyle: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                        unselectedLabelStyle:
+                            const TextStyle(color: Colors.grey),
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorWeight: 3.0,
+                        onTap: (index) {
+                          // Change month
+                          context
+                              .read<TransactionFilterCubit>()
+                              .monthIndexChanged(index + 1,
+                                  context.read<TransactionWatcherCubit>());
+                        },
+                        isScrollable: true,
+                        controller: _tabController,
+                        tabs: tabs))),
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -120,6 +124,7 @@ class _TransactionPageState extends State<TransactionPage>
                                       final transactions =
                                           convertEitherToTransactionList(
                                               state.transactions);
+                                      final transaction = transactions[index];
                                       // Checks if previous transaction is on the same day
                                       final isPreviousSameDay =
                                           isSameDayAsPrevious(
@@ -129,9 +134,18 @@ class _TransactionPageState extends State<TransactionPage>
                                           index, transactions);
                                       return TransactionCard(
                                           isPreviousSameDay: isPreviousSameDay,
-                                          onClicked: () {},
+                                          onClicked: () {
+                                            showCustomModalBottomSheet(
+                                                context,
+                                                state.transactions[index].fold(
+                                                    (expense) => ExpensePage(
+                                                        expense: expense),
+                                                    (income) => IncomePage(
+                                                          income: income,
+                                                        )));
+                                          },
                                           isNextSameDay: isNextSameDay,
-                                          transaction: transactions[index]);
+                                          transaction: transaction);
                                     });
                               } else {
                                 return Container(

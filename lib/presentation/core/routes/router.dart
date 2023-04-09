@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorKey = GlobalKey<NavigatorState>();
 final goRouter =
     GoRouter(navigatorKey: _rootNavigatorKey, initialLocation: PageRoutes.transactionPage, routes: [
   GoRoute(

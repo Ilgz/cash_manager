@@ -69,28 +69,28 @@ class _TransactionPageState extends State<TransactionPage>
                 );
               }),
             ),
-            SizedBox(
-                height: 50,
-                child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: TabBar(
-                        indicatorColor: const Color(0xff86c1d2),
-                        labelStyle: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                        unselectedLabelStyle:
-                            const TextStyle(color: Colors.grey),
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorWeight: 3.0,
-                        onTap: (index) {
-                          //Change month
-                          context
-                              .read<TransactionFilterCubit>()
-                              .monthIndexChanged(index + 1,
-                                  context.read<TransactionWatcherCubit>());
-                        },
-                        isScrollable: true,
-                        controller: _tabController,
-                        tabs: tabs))),
+            // SizedBox(
+            //     height: 50,
+            //     child: SingleChildScrollView(
+            //         scrollDirection: Axis.horizontal,
+            //         child: TabBar(
+            //             indicatorColor: const Color(0xff86c1d2),
+            //             labelStyle: const TextStyle(
+            //                 color: Colors.black, fontWeight: FontWeight.bold),
+            //             unselectedLabelStyle:
+            //                 const TextStyle(color: Colors.grey),
+            //             indicatorSize: TabBarIndicatorSize.tab,
+            //             indicatorWeight: 3.0,
+            //             onTap: (index) {
+            //               // Change month
+            //               context
+            //                   .read<TransactionFilterCubit>()
+            //                   .monthIndexChanged(index + 1,
+            //                       context.read<TransactionWatcherCubit>());
+            //             },
+            //             isScrollable: true,
+            //             controller: _tabController,
+            //             tabs: tabs))),
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -115,12 +115,15 @@ class _TransactionPageState extends State<TransactionPage>
                                     shrinkWrap: true,
                                     itemCount: transactions.length,
                                     itemBuilder: (context, index) {
+                                      // Transforms expenses and incomes into a list of Transactions
                                       final transactions =
                                           convertEitherToTransactionList(
                                               state.transactions);
+                                      // Checks if previous transaction is on the same day
                                       final isPreviousSameDay =
                                           isSameDayAsPrevious(
                                               index, transactions);
+                                      // Checks if next transaction is on the same day
                                       final isNextSameDay = isSameDayAsPrevious(
                                           index, transactions);
                                       return TransactionCard(
@@ -169,6 +172,7 @@ class _TransactionPageState extends State<TransactionPage>
     final currentTransaction = transactionList[index];
     return previousTransaction.date.day == currentTransaction.date.day;
   }
+
   bool isSameDayAsNext(int index, List<Transaction> transactionList) {
     if (index == transactionList.length - 1) {
       return false;

@@ -1,26 +1,15 @@
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
 import 'package:cash_manager/domain/transaction/expense/expense.dart';
+import 'package:cash_manager/domain/transaction/income/income.dart';
+import 'package:cash_manager/presentation/core/constants.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class IncomeExpenseChart extends StatelessWidget {
   IncomeExpenseChart({Key? key}) : super(key: key);
   List<List<int>> chartData = List.generate(12, (index) => [60, 15]);
-  List<String> chartMonths = [
-    "Jan",
-    "",
-    "Mar",
-    "",
-    "May",
-    "",
-    "Jul",
-    "",
-    "Sep",
-    "",
-    "Nov",
-    ""
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Card(elevation: 12, child: Column(children: [
@@ -51,10 +40,14 @@ class IncomeExpenseChart extends StatelessWidget {
       const SizedBox(height: 16,),
       SizedBox(height: 30,
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          ...chartMonths.map((value) => SizedBox(width: 22,
-            child: Align(alignment: Alignment.topCenter,
-                child: Text(value, style: const TextStyle(fontSize: 10, color: Colors
-                    .grey),)),)),
+          ...chartMonths.map((value) => Container(
+            width: 22,
+            height: 14,
+              child: FittedBox(fit: BoxFit.fitHeight,
+              child: Text(value, style: const TextStyle( color: Colors
+                  .grey),),
+            ),
+          )),
         ],),)
     ],),);
   }
@@ -65,42 +58,15 @@ class Candle extends StatelessWidget {
       : super(key: key);
   final bool isIncome;
   final int monthIndex;
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TransactionWatcherCubit, TransactionWatcherState>(
       builder: (context, state) {
         return state.maybeMap(loadSuccess: (state) {
-          late double height;
-          if (isIncome) {
-            double total=0;
-            for (var transaction in state.transactionData) {
-              transaction.fold((_) {},(income) {
-                if(income.date.month==(monthIndex+1)){
-                  total+=income.amount.getOrCrash();
-                }
-              }, );
-            }
-            if(total>=5000){
-              height=60;
-            }else{
-              height=total*0.012;
-            }
-          } else {
-            double total=0;
-            for (var transaction in state.transactionData) {
-              transaction.fold((expense) {
-                if(expense.date.month==(monthIndex+1)){
-                  total+=expense.amount.getOrCrash();
-                }
-              }, (_) {});
-            }
-            if(total>=5000){
-              height=60;
-            }else{
-              height=total*0.012;
-            }
-          }
+          final totals = _calculateIncomeExpenseTotals(state.transactionData);
+          final height = _calculateHeight(
+            total: isIncome ? totals['income']! : totals['expense']!,
+          );
           return Container(
             width: 6,
             height: height,
@@ -115,5 +81,32 @@ class Candle extends StatelessWidget {
       },
     );
   }
+  Map<String, double> _calculateIncomeExpenseTotals(
+      List<Either<Expense, Income>> transactionData) {
+    double totalIncome = 0;
+    double totalExpense = 0;
+
+    for (var transaction in transactionData) {
+      transaction.fold(
+            (expense) {
+          if (expense.date.month == (monthIndex + 1)) {
+            totalExpense += expense.amount.getOrCrash();
+          }
+        },
+            (income) {
+          if (income.date.month == (monthIndex + 1)) {
+            totalIncome += income.amount.getOrCrash();
+          }
+        },
+      );
+    }
+
+    return {'income': totalIncome, 'expense': totalExpense};
+  }
+
+  double _calculateHeight({required double total}) {
+    return total >= 5000 ? 60 : total * 0.012;
+  }
 }
+
 

@@ -18,6 +18,20 @@ class AppConstants{
   static const isDark="is_dark";
   static const locale="locale";
 }
+List<String> chartMonths = [
+  "Jan",
+  "",
+  "Mar",
+  "",
+  "May",
+  "",
+  "Jul",
+  "",
+  "Sep",
+  "",
+  "Nov",
+  ""
+];
 final List<String> weekDays = [
   "mon",
   "tue",

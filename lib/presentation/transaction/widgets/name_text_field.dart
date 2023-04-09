@@ -48,8 +48,8 @@ class TransactionTextField extends StatelessWidget {
             controller: controller,
             style: Theme.of(context).textTheme.bodyText1,
             cursorColor: Theme.of(context).primaryColor,
-            decoration: const InputDecoration(
-                hintText: "Expense Name",
+            decoration:  InputDecoration(
+                hintText: state.fold((_) => "Expense Name", (_) => "Income Name"),
                 border: InputBorder.none,
                 isDense: true),
             inputFormatters: [

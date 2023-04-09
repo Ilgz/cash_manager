@@ -28,7 +28,6 @@ class TransactionFilterCubit extends Cubit<TransactionFilterState> {
   void updateTransactionList(List<Either<Expense, Income>> allTransactions) {
     List<Either<Expense, Income>> filteredTransactions = _filterTransactionsByMonth(allTransactions, state.monthIndex);
     filteredTransactions.sort(_compareTransactionDates);
-    print("update ${state.monthIndex}");
     emit(state.copyWith(transactions: filteredTransactions));
   }
 

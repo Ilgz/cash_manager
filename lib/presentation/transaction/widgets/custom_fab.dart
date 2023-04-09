@@ -6,7 +6,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class CustomFAB extends StatelessWidget {
   const CustomFAB({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return    SpeedDial(

@@ -44,53 +44,54 @@ class _TransactionPageState extends State<TransactionPage>
         floatingActionButton: const CustomFAB(),
         body: Column(
           children: [
-            Expanded(
-              child: LayoutBuilder(builder: (context, constraints) {
-                return Stack(
-                  children: [
-                    Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          color: const Color(0xff0039a5),
-                          child: const Padding(
-                              padding: EdgeInsets.all(12.0), child: TopBar()),
-                        )),
-                    Positioned(
-                        top: constraints.maxHeight - 100,
-                        right: 0,
-                        left: 0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: IncomeExpenseChart(),
-                        )),
-                  ],
-                );
-              }),
-            ),
             SizedBox(
-                height: 50,
-                child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: TabBar(
-                        indicatorColor: const Color(0xff86c1d2),
-                        labelStyle: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                        unselectedLabelStyle:
-                            const TextStyle(color: Colors.grey),
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorWeight: 3.0,
-                        onTap: (index) {
-                          // Change month
-                          context
-                              .read<TransactionFilterCubit>()
-                              .monthIndexChanged(index + 1,
-                                  context.read<TransactionWatcherCubit>());
-                        },
-                        isScrollable: true,
-                        controller: _tabController,
-                        tabs: tabs))),
+              height: 360,
+              child: Stack(
+                clipBehavior: Clip.antiAlias  ,
+                children: [
+                  Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        height: 184,
+                        padding: EdgeInsets.all(12.0),
+                        color: const Color(0xff0039a5),
+                        child: TopBar(),
+                      )),
+                   const Positioned(
+                    top: 160,
+                      right: 0,
+                      left: 0,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: SizedBox(height:200,child: IncomeExpenseChart()),
+                      )),
+                ],
+              ),
+            ),
+              SizedBox(
+                  height: 50,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: TabBar(
+                          indicatorColor: const Color(0xff86c1d2),
+                          labelStyle: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                          unselectedLabelStyle:
+                              const TextStyle(color: Colors.grey),
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicatorWeight: 3.0,
+                          onTap: (index) {
+                            // Change month
+                            context
+                                .read<TransactionFilterCubit>()
+                                .monthIndexChanged(index + 1,
+                                    context.read<TransactionWatcherCubit>());
+                          },
+                          isScrollable: true,
+                          controller: _tabController,
+                          tabs: tabs))),
             Expanded(
               child: Container(
                 width: double.infinity,

@@ -9,46 +9,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class IncomeExpenseChart extends StatelessWidget {
-  IncomeExpenseChart({Key? key}) : super(key: key);
-  final List<List<int>> chartData = List.generate(12, (index) => [60, 15]);
+  const IncomeExpenseChart({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(elevation: 12, child: Column(children: [
-      const SizedBox(height: 16,),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          for(int i = 0; i < chartMonths.length; i++)...[
-            SizedBox(width: 22,height: 60,
-                child: Align(alignment: Alignment.bottomCenter, child: Candle(
-                  isIncome: false, monthIndex: i,)))
-          ]
-        ],
-      ),
-      Container(color: Colors.grey[400], width: double.infinity, height: 1,),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          for(int i = 0; i < chartMonths.length; i++)...[
-            SizedBox(width: 22,height: 60,
-                child: Align(alignment: Alignment.topCenter, child: Candle(
-                  isIncome: true, monthIndex: i,)))
-          ]
-        ],
-      ),
-      const SizedBox(height: 16,),
-      SizedBox(height: 30,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          ...chartMonths.map((value) => Container(
-            width: 22,
-            height: 14,
-              child: FittedBox(fit: BoxFit.fitHeight,
-              child: Text(value, style: const TextStyle( color: Colors
-                  .grey),),
-            ),
-          )),
-        ],),)
-    ],),);
+    const SizedBox(height: 16,),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        for(int i = 0; i < chartMonths.length; i++)...[
+          SizedBox(width: 22,height: 60,
+              child: Align(alignment: Alignment.bottomCenter, child: Candle(
+                isIncome: false, monthIndex: i,)))
+        ]
+      ],
+    ),
+    Container(color: Colors.grey[400], width: double.infinity, height: 1,),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        for(int i = 0; i < chartMonths.length; i++)...[
+          SizedBox(width: 22,height: 60,
+              child: Align(alignment: Alignment.topCenter, child: Candle(
+                isIncome: true, monthIndex: i,)))
+        ]
+      ],
+    ),
+    const SizedBox(height: 16,),
+    Container(height: 30,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        ...chartMonths.map((value) => Container(
+          width: 22,
+          height: 14,
+            child: FittedBox(fit: BoxFit.fitHeight,
+            child: Text(value, style: const TextStyle( color: Colors
+                .grey),),
+          ),
+        )),
+      ],),)
+        ],),);
   }
 }
 

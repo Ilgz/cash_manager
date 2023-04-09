@@ -1,6 +1,7 @@
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
 import 'package:cash_manager/presentation/core/routes/router.dart';
-import 'package:cash_manager/presentation/core/utils/balance_formatter.dart';
+import 'package:cash_manager/presentation/core/utils/transaction_display_utils.dart';
+import 'package:cash_manager/presentation/core/utils/transaction_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,7 +23,7 @@ class TopBar extends StatelessWidget {
                 CrossAxisAlignment.start,
                 children: const [
                   Text(
-                    "Hi, Ilgiz",
+                    "Hi, There",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -89,21 +90,15 @@ class TopBar extends StatelessWidget {
                           return Text(
                             state.maybeMap(
                               loadSuccess: (state) {
-                                double balance = 0;
-                                for (var transaction
-                                in state
-                                    .transactionData) {
-                                  transaction.fold(
-                                          (expense) =>
-                                      balance -= expense
-                                          .amount
-                                          .getOrCrash(),
-                                          (income) => balance +=
-                                          income.amount
-                                              .getOrCrash());
-                                }
-                                return formatBalance(
-                                    balance);
+                                final transactions=convertEitherToTransactionList(state.transactionData);
+                                final expenseIncomeTotal =
+                                calculateExpenseIncomeTotal(
+                                    transactions);
+                                final balance =
+                                    expenseIncomeTotal.value2 -
+                                        expenseIncomeTotal.value1
+                                            .toDouble();
+                                return formatBalance(balance);
                               },
                               orElse: () => '0',
                             ),

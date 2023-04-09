@@ -1,7 +1,7 @@
 import 'package:cash_manager/domain/core/transaction.dart';
 import 'package:cash_manager/domain/transaction/category.dart';
-import 'package:cash_manager/presentation/core/utils/amount_utils.dart';
 import 'package:cash_manager/presentation/core/utils/datetime_utils.dart';
+import 'package:cash_manager/presentation/core/utils/transaction_display_utils.dart';
 import 'package:flutter/material.dart';
 
 class TransactionCard extends StatelessWidget {

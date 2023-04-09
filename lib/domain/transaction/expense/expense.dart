@@ -18,7 +18,7 @@ abstract class Expense implements _$Expense {
     Category('Utilities',Icons.build_outlined,Colors.blue),
     Category('Shopping',Icons.shopping_bag_outlined,Color(0xfff27d1e)),
     Category('Education',Icons.school_outlined,Colors.lightGreenAccent),
-    Category('Healthcare',Icons.local_hospital_outlined,Colors.green[100]!),
+    Category('Healthcare',Icons.local_hospital_outlined,Colors.greenAccent!),
     Category('Travel',Icons.flight_outlined,Color(0xff00b6e4)),
     Category('Other',Icons.more_horiz_outlined,Colors.grey)
   ];

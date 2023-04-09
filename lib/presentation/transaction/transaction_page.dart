@@ -1,10 +1,9 @@
 import 'package:cash_manager/application/transaction/transaction_filter/transaction_filter_cubit.dart';
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
 import 'package:cash_manager/domain/core/transaction.dart';
-import 'package:cash_manager/domain/transaction/expense/expense.dart';
-import 'package:cash_manager/domain/transaction/income/income.dart';
 import 'package:cash_manager/presentation/core/constants.dart';
 import 'package:cash_manager/presentation/core/utils/bottom_sheet_helpers.dart';
+import 'package:cash_manager/presentation/core/utils/transaction_utils.dart';
 import 'package:cash_manager/presentation/core/widgets/critical_failure_card.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_progress_indicator.dart';
 import 'package:cash_manager/presentation/core/widgets/custom_scaffold.dart';
@@ -14,7 +13,6 @@ import 'package:cash_manager/presentation/transaction/widgets/custom_fab.dart';
 import 'package:cash_manager/presentation/transaction/widgets/income_expense_chart.dart';
 import 'package:cash_manager/presentation/transaction/widgets/top_bar.dart';
 import 'package:cash_manager/presentation/transaction/widgets/transaction_card.dart';
-import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -107,6 +105,7 @@ class _TransactionPageState extends State<TransactionPage>
                         initial: (_) => const SizedBox(),
                         loadInProgress: (_) => const CustomProgressIndicator(),
                         loadSuccess: (successState) {
+                          // Updates data for filtering when new raw data is fetched
                           context
                               .read<TransactionFilterCubit>()
                               .updateTransactionList(
@@ -166,17 +165,6 @@ class _TransactionPageState extends State<TransactionPage>
             )
           ],
         ));
-  }
-
-  List<Transaction> convertEitherToTransactionList(
-      List<Either<Expense, Income>> incomesOrExpenses) {
-    List<Transaction> transactionList = [];
-    for (var incomeOrExpense in incomesOrExpenses) {
-      transactionList.add(incomeOrExpense.fold(
-          (expense) => Transaction.fromExpense(expense),
-          (income) => Transaction.fromIncome(income)));
-    }
-    return transactionList;
   }
 
   bool isSameDayAsPrevious(int index, List<Transaction> transactionList) {

@@ -1,4 +1,6 @@
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
+import 'package:cash_manager/presentation/core/utils/transaction_display_utils.dart';
+import 'package:cash_manager/presentation/core/utils/transaction_utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -131,43 +133,12 @@ class FlowCard extends StatelessWidget {
                                 Text(
                                   state.maybeMap(
                                     loadSuccess: (state) {
-                                      double balance = 0;
-                                      for (var transaction
-                                          in state.transactionData) {
-                                        if (isInflow) {
-                                          transaction.fold((_) {}, (income) {
-                                            if (income.date.month ==
-                                                DateTime.now().month) {
-                                              balance +=
-                                                  income.amount.getOrCrash();
-                                            }
-                                          });
-                                        } else {
-                                          transaction.fold(
-                                            (expense) {
-                                              if (expense.date.month ==
-                                                  DateTime.now().month) {
-                                                balance +=
-                                                    expense.amount.getOrCrash();
-                                              }
-                                            },
-                                            (_) {},
-                                          );
-                                        }
-                                      }
-                                      String rawBalance =
-                                          balance.toInt().toString();
-                                      late String formattedBalance;
-                                      if (rawBalance.length == 4) {
-                                        formattedBalance = NumberFormat('#,###')
-                                            .format(balance.toInt());
-                                      } else if (rawBalance.length == 5) {
-                                        formattedBalance = NumberFormat('##,###')
-                                            .format(balance.toInt());
-                                      } else {
-                                        formattedBalance = rawBalance;
-                                      }
-                                      return formattedBalance;
+                                      final transactions=convertEitherToTransactionList(state.transactionData);
+                                      final currentMonthTransactions=transactions.where((transaction) => (transaction.date.year==DateTime.now().year)&&(transaction.date.month==DateTime.now().month)).toList();
+                                      final expenseIncomeTotal =
+                                      calculateExpenseIncomeTotal(
+                                          currentMonthTransactions);
+                                      return formatBalance(isInflow?expenseIncomeTotal.value2.toDouble():expenseIncomeTotal.value1.toDouble());
                                     },
                                     orElse: () => '0',
                                   ),

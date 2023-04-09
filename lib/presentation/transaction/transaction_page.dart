@@ -69,28 +69,28 @@ class _TransactionPageState extends State<TransactionPage>
                 );
               }),
             ),
-            // SizedBox(
-            //     height: 50,
-            //     child: SingleChildScrollView(
-            //         scrollDirection: Axis.horizontal,
-            //         child: TabBar(
-            //             indicatorColor: const Color(0xff86c1d2),
-            //             labelStyle: const TextStyle(
-            //                 color: Colors.black, fontWeight: FontWeight.bold),
-            //             unselectedLabelStyle:
-            //                 const TextStyle(color: Colors.grey),
-            //             indicatorSize: TabBarIndicatorSize.tab,
-            //             indicatorWeight: 3.0,
-            //             onTap: (index) {
-            //               // Change month
-            //               context
-            //                   .read<TransactionFilterCubit>()
-            //                   .monthIndexChanged(index + 1,
-            //                       context.read<TransactionWatcherCubit>());
-            //             },
-            //             isScrollable: true,
-            //             controller: _tabController,
-            //             tabs: tabs))),
+            SizedBox(
+                height: 50,
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: TabBar(
+                        indicatorColor: const Color(0xff86c1d2),
+                        labelStyle: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                        unselectedLabelStyle:
+                            const TextStyle(color: Colors.grey),
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorWeight: 3.0,
+                        onTap: (index) {
+                          // Change month
+                          context
+                              .read<TransactionFilterCubit>()
+                              .monthIndexChanged(index + 1,
+                                  context.read<TransactionWatcherCubit>());
+                        },
+                        isScrollable: true,
+                        controller: _tabController,
+                        tabs: tabs))),
             Expanded(
               child: Container(
                 width: double.infinity,

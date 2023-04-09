@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cash_manager/application/transaction/transaction_watcher/transaction_watcher_cubit.dart';
 import 'package:cash_manager/domain/transaction/expense/expense.dart';
 import 'package:cash_manager/domain/transaction/income/income.dart';
@@ -5,21 +7,19 @@ import 'package:cash_manager/presentation/core/constants.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/adapters.dart';
 
 class IncomeExpenseChart extends StatelessWidget {
   IncomeExpenseChart({Key? key}) : super(key: key);
-  List<List<int>> chartData = List.generate(12, (index) => [60, 15]);
+  final List<List<int>> chartData = List.generate(12, (index) => [60, 15]);
   @override
   Widget build(BuildContext context) {
     return Card(elevation: 12, child: Column(children: [
       const SizedBox(height: 16,),
       Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           for(int i = 0; i < chartMonths.length; i++)...[
-            SizedBox(width: 22,
+            SizedBox(width: 22,height: 60,
                 child: Align(alignment: Alignment.bottomCenter, child: Candle(
                   isIncome: false, monthIndex: i,)))
           ]
@@ -27,12 +27,11 @@ class IncomeExpenseChart extends StatelessWidget {
       ),
       Container(color: Colors.grey[400], width: double.infinity, height: 1,),
       Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           for(int i = 0; i < chartMonths.length; i++)...[
-            SizedBox(width: 22,
-                child: Align(alignment: Alignment.bottomCenter, child: Candle(
+            SizedBox(width: 22,height: 60,
+                child: Align(alignment: Alignment.topCenter, child: Candle(
                   isIncome: true, monthIndex: i,)))
           ]
         ],
@@ -69,9 +68,9 @@ class Candle extends StatelessWidget {
           );
           return Container(
             width: 6,
-            height: height,
+            height: height==0?Random().nextInt(45)+15:height,
             decoration: BoxDecoration(
-                color: isIncome ?   const Color(0xff08b1e2):const Color(0xff01359a),
+                color: getBarColor(height,isIncome),
                 borderRadius: !isIncome
                     ? const BorderRadius.only(
                     topLeft: Radius.circular(10), topRight: Radius.circular(10))
@@ -80,6 +79,23 @@ class Candle extends StatelessWidget {
         }, orElse: () => const SizedBox());
       },
     );
+  }
+  Color getBarColor(double height,bool isIncome){
+    late Color color;
+    if(height==0){
+      if(isIncome){
+        color= Colors.grey[400]!;
+      }else{
+        color= Colors.grey[700]!;
+      }
+    }else{
+      if(isIncome){
+        color=const Color(0xff08b1e2);
+      }else{
+    color=const Color(0xff01359a);
+      }
+    }
+    return color;
   }
   Map<String, double> _calculateIncomeExpenseTotals(
       List<Either<Expense, Income>> transactionData) {
